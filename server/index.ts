@@ -1,23 +1,23 @@
-import { ApolloServer, gql } from 'apollo-server-express';
-import bodyParser from 'body-parser';
+import { ApolloServer, gql } from "apollo-server-express";
+import bodyParser from "body-parser";
 import express from "express";
-import cors from 'cors'
-import schema from './schema';
+import cors from "cors";
+import schema from "./schema";
 
 const app = express();
 
 //middleware - cors to allow cross origin requests(not local host only)
-app.use(cors())
+app.use(cors());
 
 //middleware - adding parser to that parses incoming request to middleware
-app.use(bodyParser.json())
+app.use(bodyParser.json());
 
 //inject schema into new ApolloServer
-const server = new ApolloServer({ schema })
+const server = new ApolloServer({ schema });
 
 server.applyMiddleware({
   app,
-  path: '/graphql'
+  path: "/graphql"
 });
 
 const port = process.env.PORT || 4000;

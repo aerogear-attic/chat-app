@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="jest tests" tests="1" failures="1" time="2.302">
+  <testsuite name="Query.chats" errors="0" failures="1" skipped="0" timestamp="2019-07-11T10:52:51" time="1.876" tests="1">
+    <testcase classname="Query.chats should fetch all chats" name="Query.chats should fetch all chats" time="0.02">
+      <failure>GraphQLError: Syntax Error: Unexpected }
+    at syntaxError (/home/michalstokluska/dev/chat-app/server/node_modules/graphql/error/syntaxError.js:15:10)
+    at unexpected (/home/michalstokluska/dev/chat-app/server/node_modules/graphql/language/parser.js:1485:39)
+    at parseDefinition (/home/michalstokluska/dev/chat-app/server/node_modules/graphql/language/parser.js:148:9)
+    at many (/home/michalstokluska/dev/chat-app/server/node_modules/graphql/language/parser.js:1518:16)
+    at parseDocument (/home/michalstokluska/dev/chat-app/server/node_modules/graphql/language/parser.js:108:18)
+    at parse (/home/michalstokluska/dev/chat-app/server/node_modules/graphql/language/parser.js:43:10)
+    at parseDocument (/home/michalstokluska/dev/chat-app/server/node_modules/graphql-tag/src/index.js:129:16)
+    at Object.gql (/home/michalstokluska/dev/chat-app/server/node_modules/graphql-tag/src/index.js:170:10)
+    at Object.it (/home/michalstokluska/dev/chat-app/server/tests/queries/getChats.test.ts:12:17)
+    at Object.asyncJestTest (/home/michalstokluska/dev/chat-app/server/node_modules/jest-jasmine2/build/jasmineAsyncInstall.js:102:37)
+    at resolve (/home/michalstokluska/dev/chat-app/server/node_modules/jest-jasmine2/build/queueRunner.js:43:12)
+    at new Promise (&lt;anonymous&gt;)
+    at mapper (/home/michalstokluska/dev/chat-app/server/node_modules/jest-jasmine2/build/queueRunner.js:26:19)
+    at promise.then (/home/michalstokluska/dev/chat-app/server/node_modules/jest-jasmine2/build/queueRunner.js:73:41)
+    at process._tickCallback (internal/process/next_tick.js:68:7)</failure>
+    </testcase>
+  </testsuite>
+</testsuites>
