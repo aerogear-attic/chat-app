@@ -10,10 +10,15 @@ type Chat{
     id: ID!
     name: String!
     picture: String
+    lastMessage: Message
     messages: [Message!]!
 }
 
 type Query {
     chats: [Chat!]!
     chat(chatId: ID!): Chat
+}
+
+type Mutation {
+    addMessage(chatId: ID!, content: String!): Message
 }
