@@ -10,7 +10,6 @@ type Chat{
     id: ID!
     name: String!
     picture: String
-    lastMessage: Message
     messages: [Message!]!
 }
 

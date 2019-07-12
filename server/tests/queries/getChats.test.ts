@@ -15,14 +15,14 @@ describe("Query.chats", () => {
             id
             name
             picture
-            lastMessage {
-                id
-                content
-                createdAt
+            messages {
+              id
+              content
+              createdAt
             }
+          }
         }
-    }
-    `
+      `
     });
 
     expect(res.data).toBeDefined();
