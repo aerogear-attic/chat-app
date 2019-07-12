@@ -1,5 +1,4 @@
-import React from 'react';
-import { chats } from '../../db';
+import React, { useState, useMemo } from 'react';
 import moment from 'moment';
 import { List, ListItem } from '@material-ui/core';
 import styled from 'styled-components';
@@ -49,7 +48,17 @@ const MessageDate = styled.div`
   font-size: 13px;
 `;
 
-const ChatList: React.FC = () => (
+const ChatList: React.FC = () => {
+
+  const [chats, setChats] = useState<any[]>([]);
+
+  useMemo(async () => {
+    const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/chats`);
+    const body = await response.json();
+    setChats(body);
+  }, []);
+
+  return(
     <Container>
         <StyledList>
             {chats.map(chat => (
@@ -70,6 +79,7 @@ const ChatList: React.FC = () => (
             ))}
         </StyledList>
     </Container>
-);
+  );
+};
 
 export default ChatList;
