@@ -6,13 +6,10 @@ import schema from "./schema";
 
 const app = express();
 
-//middleware - cors to allow cross origin requests(not local host only)
 app.use(cors());
 
-//middleware - adding parser to that parses incoming request to middleware
 app.use(bodyParser.json());
 
-//inject schema into new ApolloServer
 const server = new ApolloServer({ schema });
 
 server.applyMiddleware({
