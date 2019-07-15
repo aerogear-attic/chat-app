@@ -6,7 +6,6 @@ import http from "http";
 import schema from "./schema";
 
 const app = express();
-
 app.use(cors());
 
 app.use(bodyParser.json());
