@@ -51,14 +51,6 @@ export type QueryChatArgs = {
   chatId: Scalars["ID"];
 };
 
-<<<<<<< HEAD
-=======
-export type Subscription = {
-  __typename?: "Subscription";
-  messageAdded: Message;
-};
-
->>>>>>> fix: .gitignore, removing time zone from jest
 export type ResolverTypeWrapper<T> = Promise<T> | T;
 
 export type ResolverFn<TResult, TParent, TContext, TArgs> = (
@@ -137,10 +129,6 @@ export type ResolversTypes = {
   Message: ResolverTypeWrapper<Message>;
   Date: ResolverTypeWrapper<Scalars["Date"]>;
   Mutation: ResolverTypeWrapper<{}>;
-<<<<<<< HEAD
-=======
-  Subscription: ResolverTypeWrapper<{}>;
->>>>>>> fix: .gitignore, removing time zone from jest
   Boolean: ResolverTypeWrapper<Scalars["Boolean"]>;
 };
 
@@ -153,19 +141,11 @@ export type ResolversParentTypes = {
   Message: Message;
   Date: Scalars["Date"];
   Mutation: {};
-<<<<<<< HEAD
-=======
-  Subscription: {};
->>>>>>> fix: .gitignore, removing time zone from jest
   Boolean: Scalars["Boolean"];
 };
 
 export type ChatResolvers<
-<<<<<<< HEAD
   ContextType = any,
-=======
-  ContextType = MyContext,
->>>>>>> fix: .gitignore, removing time zone from jest
   ParentType = ResolversParentTypes["Chat"]
 > = {
   id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>;
@@ -189,11 +169,7 @@ export interface DateScalarConfig
 }
 
 export type MessageResolvers<
-<<<<<<< HEAD
   ContextType = any,
-=======
-  ContextType = MyContext,
->>>>>>> fix: .gitignore, removing time zone from jest
   ParentType = ResolversParentTypes["Message"]
 > = {
   id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>;
@@ -202,11 +178,7 @@ export type MessageResolvers<
 };
 
 export type MutationResolvers<
-<<<<<<< HEAD
   ContextType = any,
-=======
-  ContextType = MyContext,
->>>>>>> fix: .gitignore, removing time zone from jest
   ParentType = ResolversParentTypes["Mutation"]
 > = {
   addMessage?: Resolver<
@@ -218,11 +190,7 @@ export type MutationResolvers<
 };
 
 export type QueryResolvers<
-<<<<<<< HEAD
   ContextType = any,
-=======
-  ContextType = MyContext,
->>>>>>> fix: .gitignore, removing time zone from jest
   ParentType = ResolversParentTypes["Query"]
 > = {
   chats?: Resolver<Array<ResolversTypes["Chat"]>, ParentType, ContextType>;
@@ -234,39 +202,16 @@ export type QueryResolvers<
   >;
 };
 
-<<<<<<< HEAD
 export type Resolvers<ContextType = any> = {
-=======
-export type SubscriptionResolvers<
-  ContextType = MyContext,
-  ParentType = ResolversParentTypes["Subscription"]
-> = {
-  messageAdded?: SubscriptionResolver<
-    ResolversTypes["Message"],
-    ParentType,
-    ContextType
-  >;
-};
-
-export type Resolvers<ContextType = MyContext> = {
->>>>>>> fix: .gitignore, removing time zone from jest
   Chat?: ChatResolvers<ContextType>;
   Date?: GraphQLScalarType;
   Message?: MessageResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
-<<<<<<< HEAD
-=======
-  Subscription?: SubscriptionResolvers<ContextType>;
->>>>>>> fix: .gitignore, removing time zone from jest
 };
 
 /**
  * @deprecated
  * Use "Resolvers" root object instead. If you wish to get "IResolvers", add "typesPrefix: I" to your config.
  */
-<<<<<<< HEAD
 export type IResolvers<ContextType = any> = Resolvers<ContextType>;
-=======
-export type IResolvers<ContextType = MyContext> = Resolvers<ContextType>;
->>>>>>> fix: .gitignore, removing time zone from jest
