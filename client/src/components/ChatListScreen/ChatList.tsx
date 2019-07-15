@@ -48,36 +48,59 @@ const MessageDate = styled.div`
   font-size: 13px;
 `;
 
-const ChatList: React.FC = () => {
+const getChatsQuery = `
+  query getChats {
+    chats {
+      id
+      name
+      picture
+      lastMessage {
+        id
+        content
+        createdAt
+      }
+    }
+  }
+`;
 
+const ChatList: React.FC = () => {
   const [chats, setChats] = useState<any[]>([]);
 
   useMemo(async () => {
-    const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/chats`);
-    const body = await response.json();
-    setChats(body);
+    const body = await fetch(`${process.env.REACT_APP_SERVER_URL}/graphql`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ query: getChatsQuery })
+    });
+    const {
+      data: { chats }
+    } = await body.json();
+
+    setChats(chats);
   }, []);
 
-  return(
+  return (
     <Container>
-        <StyledList>
-            {chats.map(chat => (
-                <StyledListItem key={chat.id} button>
-                    <ChatPicture src={chat.picture} alt='Profile' />
-                    <ChatInfo>
-                        <ChatName>{chat.name}</ChatName>
-                        {chat.lastMessage && (
-                            <React.Fragment>
-                                <MessageContent>{chat.lastMessage.content}</MessageContent>
-                                <MessageDate>
-                                    {moment(chat.lastMessage.createdAt).format('HH:mm')}
-                                </MessageDate>
-                            </React.Fragment>
-                        )}
-                    </ChatInfo>
-                </StyledListItem>
-            ))}
-        </StyledList>
+      <StyledList>
+        {chats.map(chat => (
+          <StyledListItem key={chat.id} button>
+            <ChatPicture src={chat.picture} alt='Profile' />
+            <ChatInfo>
+              <ChatName>{chat.name}</ChatName>
+              {chat.lastMessage && (
+                <React.Fragment>
+                  <MessageContent>{chat.lastMessage.content}</MessageContent>
+                  <MessageDate>
+                    {moment(chat.lastMessage.createdAt).format('HH:mm')}
+                  </MessageDate>
+                </React.Fragment>
+              )}
+            </ChatInfo>
+          </StyledListItem>
+        ))}
+      </StyledList>
     </Container>
   );
 };
