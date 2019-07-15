@@ -6,7 +6,7 @@
   "private": true,
   "scripts": {
     "start": "ts-node index.ts",
-    "test": "TZ=\"Asia/Jerusalem\" jest",
+    "test": "jest",
     "format": "prettier \"**/*.ts\" --write"
   },
   "jest-junit": {

@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuites name="jest tests" tests="3" failures="0" time="1.399">
-  <testsuite name="Mutation.addMessage" errors="0" failures="0" skipped="0" timestamp="2019-07-12T14:56:27" time="0.783" tests="1">
-    <testcase classname="Mutation.addMessage should add message to specified chat" name="Mutation.addMessage should add message to specified chat" time="0.032">
+<testsuites name="jest tests" tests="3" failures="0" time="3.325">
+  <testsuite name="Query.chat" errors="0" failures="0" skipped="0" timestamp="2019-07-15T07:46:33" time="2.521" tests="1">
+    <testcase classname="Query.chat should fetch specified chat" name="Query.chat should fetch specified chat" time="0.03">
     </testcase>
   </testsuite>
-  <testsuite name="Query.chats" errors="0" failures="0" skipped="0" timestamp="2019-07-12T14:56:27" time="0.102" tests="1">
-    <testcase classname="Query.chats should fetch all chats" name="Query.chats should fetch all chats" time="0.012">
+  <testsuite name="Query.chats" errors="0" failures="0" skipped="0" timestamp="2019-07-15T07:46:33" time="2.525" tests="1">
+    <testcase classname="Query.chats should fetch all chats" name="Query.chats should fetch all chats" time="0.033">
     </testcase>
   </testsuite>
-  <testsuite name="Query.chat" errors="0" failures="0" skipped="0" timestamp="2019-07-12T14:56:28" time="0.09" tests="1">
-    <testcase classname="Query.chat should fetch specified chat" name="Query.chat should fetch specified chat" time="0.011">
+  <testsuite name="Mutation.addMessage" errors="0" failures="0" skipped="0" timestamp="2019-07-15T07:46:33" time="2.537" tests="1">
+    <testcase classname="Mutation.addMessage should add message to specified chat" name="Mutation.addMessage should add message to specified chat" time="0.042">
     </testcase>
   </testsuite>
 </testsuites>
