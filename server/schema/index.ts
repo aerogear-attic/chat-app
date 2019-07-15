@@ -4,8 +4,7 @@ import resolvers from "./resolvers";
 
 const typeDefs = importSchema("schema/typeDefs.graphql");
 
-export default makeExecutableSchema({ 
-    resolvers: resolvers as IResolvers,
-    typeDefs
- });
-
+export default makeExecutableSchema({
+  resolvers: resolvers as IResolvers,
+  typeDefs
+});
