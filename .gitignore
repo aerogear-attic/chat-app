@@ -2,4 +2,4 @@
 **/*.log
 **/test-results
 **/yarn-error.log
-
+**/types/graphql.d.ts
