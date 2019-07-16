@@ -15,7 +15,7 @@ jobs:
           command: yarn build
       - run:
           name: run server tests
-          command: yarn test
+          command: yarn test -u
       - store_test_results:
           path: test-results
   build-client:
@@ -33,7 +33,7 @@ jobs:
           command: yarn build
       - run:
           name: run server tests
-          command: yarn test
+          command: yarn test -u
       - store_test_results:
           path: test-results
 workflows:
