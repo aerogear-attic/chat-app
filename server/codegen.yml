@@ -6,9 +6,14 @@ generates:
       - typescript
       - typescript-resolvers
     config:
+       # defining typescript type of content for subscriptions - uses context.ts
       contextType: ../context#MyContext
       mappers:
+        # import { Message } from '../db'
+        # The root types of Message resolvers
+        User: ../db#User
         Message: ../db#Message
         Chat: ../db#Chat
       scalars:
+        # e.g. Message.createdAt will be of type Date
         Date: Date
