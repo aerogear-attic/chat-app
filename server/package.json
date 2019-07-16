@@ -9,7 +9,8 @@
     "start": "ts-node index.ts",
     "test": "jest",
     "format": "prettier \"**/*.ts\" --write",
-    "codegen": "gql-gen"
+    "codegen": "gql-gen",
+    "build": "tsc"
   },
   "jest-junit": {
     "outputDirectory": "./test-results"
