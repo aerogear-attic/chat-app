@@ -1,0 +1,50 @@
+version: 2.1
+jobs:
+  build-server:
+    working_directory: ~/chat-app/server # All the steps below are being run in the server directory
+    docker:
+      - image: circleci/node:lts
+    steps:
+      - checkout:
+          path: ~/chat-app
+      - run:
+          name: install-dependencies
+          command: yarn install
+      - run:
+          name: compile server typescript code
+          command: yarn build
+      - run:
+          name: run server tests
+          command: yarn test
+      - store_test_results:
+          path: test-results
+  build-client:
+    working_directory: ~/chat-app/client # All the steps below are being run in the client directory
+    docker:
+      - image: circleci/node:lts
+    steps:
+      - checkout:
+          path: ~/chat-app
+      - run:
+          name: install-dependencies
+          command: yarn install
+      - run:
+          name: compile server typescript code
+          command: yarn build
+      - run:
+          name: run server tests
+          command: yarn test
+      - store_test_results:
+          path: test-results
+workflows:
+  version: 2
+  build_and_deploy:
+    jobs:
+      - build-server:
+          filters:
+            tags:
+              only: /.*/
+      - build-client:
+          filters:
+            tags:
+              only: /.*/
