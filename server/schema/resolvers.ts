@@ -67,11 +67,8 @@ const resolvers: Resolvers = {
     },
 
     // returns participants of chat room by matching participant ID with User Id
-    // TODO: Ask for help in .filter(boolean) ------------------------------------------------!!!!!
     participants(chat) {
-      return chat.participants
-        .map(p => users.find(u => u.id === p))
-        .filter(Boolean) as User[];
+      return chat.participants.map(p => users.find(u => u.id === p)) as User[];
     }
   },
   Query: {
