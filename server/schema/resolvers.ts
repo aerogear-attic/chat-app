@@ -1,6 +1,7 @@
 import { GraphQLDateTime } from "graphql-iso-date";
 import { User, Message, Chat, chats, messages, users } from "../db";
 import { Resolvers } from "../types/graphql";
+import { withFilter } from "graphql-subscriptions";
 
 const resolvers: Resolvers = {
   Date: GraphQLDateTime,
@@ -130,7 +131,7 @@ const resolvers: Resolvers = {
     },
 
     // adding a feature to create a chat room with current user and recipient from users list
-    addChat(root, { recipientId }, { currentUser }) {
+    addChat(root, { recipientId }, { currentUser, pubsub }) {
       if (!currentUser) return null;
 
       // at least one element in users array must pass function provided in some(recipientID must be equal to one of users Id from users array) or return null
@@ -158,6 +159,11 @@ const resolvers: Resolvers = {
 
       chats.push(chat);
 
+      // adding subscription to addChat mutation
+      pubsub.publish("chatAdded", {
+        chatAdded: chat
+      });
+
       return chat;
     }
   },
@@ -170,6 +176,16 @@ const resolvers: Resolvers = {
         // asyncIterator returns an iterator like object that by default parameter that has similiar name to the subscription will be returned
         // in this scenario message will be returned from messageAdded publish inside addMessage resolver
         pubsub.asyncIterator("messageAdded")
+    },
+        // adding a subcription for chatAdded. It will broadcast to the current user only if he is a participant of published chat
+    chatAdded: {
+      subscribe: withFilter(
+        (root, args, { pubsub }) => pubsub.asyncIterator("chatAdded"),
+        ({ chatAdded }: { chatAdded: Chat }, args, { currentUser }) => {
+          if (!currentUser) return false;
+          return chatAdded.participants.some(p => p === currentUser.id);
+        }
+      )
     }
   }
 };

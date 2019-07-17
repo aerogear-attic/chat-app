@@ -65,6 +65,7 @@ export type QueryChatArgs = {
 export type Subscription = {
   __typename?: "Subscription";
   messageAdded: Message;
+  chatAdded: Chat;
 };
 
 export type User = {
@@ -250,6 +251,11 @@ export type SubscriptionResolvers<
 > = {
   messageAdded?: SubscriptionResolver<
     ResolversTypes["Message"],
+    ParentType,
+    ContextType
+  >;
+  chatAdded?: SubscriptionResolver<
+    ResolversTypes["Chat"],
     ParentType,
     ContextType
   >;
