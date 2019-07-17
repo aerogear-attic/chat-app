@@ -165,6 +165,36 @@ const resolvers: Resolvers = {
       });
 
       return chat;
+    },
+
+    // removing chat by chatId and only if currentUser is one of participants, also, removing all the messages of that chat.
+    removeChat(root, { chatId }, { currentUser }) {
+      if (!currentUser) return null;
+
+      const chatIndex = chats.findIndex(c => c.id === chatId);
+
+      if (chatIndex === -1) return null;
+
+      const chat = chats[chatIndex];
+
+      // if at theres not at least 1 participant of id same as current user return null
+      if (!chat.participants.some(p => p === currentUser.id)) return null;
+
+      // chatMessage is an id of message that belongs to chat object pulled from const chat
+      // then going through all messages and looking for a message with ID same as chatMessage ID
+      chat.messages.forEach(chatMessage => {
+        const chatMessageIndex = messages.findIndex(m => m.id === chatMessage);
+
+        // if message is found ( chatmessageindex is not equal to -1 ) removing 1 message from chatMessageIndex position in the array
+        // process is repeated until chatMessageIndex is equal to -1
+        if (chatMessageIndex !== -1) {
+          messages.splice(chatMessageIndex, 1);
+        }
+      });
+      // Once messages are removed, removing 1 element from Chat with position of chatIndex
+      chats.splice(chatIndex, 1);
+
+      return chatId;
     }
   },
 
@@ -177,7 +207,7 @@ const resolvers: Resolvers = {
         // in this scenario message will be returned from messageAdded publish inside addMessage resolver
         pubsub.asyncIterator("messageAdded")
     },
-        // adding a subcription for chatAdded. It will broadcast to the current user only if he is a participant of published chat
+    // adding a subcription for chatAdded. It will broadcast to the current user only if he is a participant of published chat
     chatAdded: {
       subscribe: withFilter(
         (root, args, { pubsub }) => pubsub.asyncIterator("chatAdded"),
