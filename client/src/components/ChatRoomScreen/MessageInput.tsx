@@ -68,12 +68,14 @@ const MessageInput: React.FC<MessageInputProps> = ({ onSendMessage }) => {
   return (
     <Container>
       <ActualInput
+        data-testid='message-input'
         type='text'
         placeholder='Type a message'
         value={message}
         onKeyPress={onKeyPress}
         onChange={onChange} />
       <SendButton
+        data-testid='send-button'
         variant='contained'
         color='primary'
         onClick={submitMessage}>
