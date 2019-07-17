@@ -90,7 +90,7 @@ const resolvers: Resolvers = {
     users(root, args, { currentUser }) {
       if (!currentUser) return [];
       return users.filter(u => u.id !== currentUser.id);
-    },
+    }
   },
 
   Mutation: {
