@@ -71,6 +71,7 @@ export type Subscription = {
   __typename?: "Subscription";
   messageAdded: Message;
   chatAdded: Chat;
+  chatRemoved: Scalars["ID"];
 };
 
 export type User = {
@@ -267,6 +268,11 @@ export type SubscriptionResolvers<
   >;
   chatAdded?: SubscriptionResolver<
     ResolversTypes["Chat"],
+    ParentType,
+    ContextType
+  >;
+  chatRemoved?: SubscriptionResolver<
+    ResolversTypes["ID"],
     ParentType,
     ContextType
   >;
