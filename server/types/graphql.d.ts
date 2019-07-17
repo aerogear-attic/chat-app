@@ -39,11 +39,16 @@ export type Message = {
 export type Mutation = {
   __typename?: "Mutation";
   addMessage?: Maybe<Message>;
+  addChat?: Maybe<Chat>;
 };
 
 export type MutationAddMessageArgs = {
   chatId: Scalars["ID"];
   content: Scalars["String"];
+};
+
+export type MutationAddChatArgs = {
+  recipientId: Scalars["ID"];
 };
 
 export type Query = {
@@ -216,6 +221,12 @@ export type MutationResolvers<
     ParentType,
     ContextType,
     MutationAddMessageArgs
+  >;
+  addChat?: Resolver<
+    Maybe<ResolversTypes["Chat"]>,
+    ParentType,
+    ContextType,
+    MutationAddChatArgs
   >;
 };
 

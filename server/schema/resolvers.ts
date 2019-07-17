@@ -1,5 +1,5 @@
 import { GraphQLDateTime } from "graphql-iso-date";
-import { User, Message, chats, messages, users } from "../db";
+import { User, Message, Chat, chats, messages, users } from "../db";
 import { Resolvers } from "../types/graphql";
 
 const resolvers: Resolvers = {
@@ -127,6 +127,38 @@ const resolvers: Resolvers = {
         messageAdded: message
       });
       return message;
+    },
+
+    // adding a feature to create a chat room with current user and recipient from users list
+    addChat(root, { recipientId }, { currentUser }) {
+      if (!currentUser) return null;
+
+      // at least one element in users array must pass function provided in some(recipientID must be equal to one of users Id from users array) or return null
+      if (!users.some(u => u.id === recipientId)) return null;
+
+      // finding and assigning current user id and recipient id to 'chat' var from chats array
+      let chat = chats.find(
+        c =>
+          c.participants.includes(currentUser.id) &&
+          c.participants.includes(recipientId)
+      );
+
+      // if chat has value return chat
+      if (chat) return chat;
+
+      // creating new array with chats id's
+      const chatsIds = chats.map(c => Number(c.id));
+
+      // creating new chat object with new ID which is incrementing max exisiting chat id by 1
+      chat = {
+        id: String(Math.max(...chatsIds) + 1),
+        participants: [currentUser.id, recipientId],
+        messages: []
+      };
+
+      chats.push(chat);
+
+      return chat;
     }
   },
 
