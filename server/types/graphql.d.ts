@@ -50,6 +50,7 @@ export type Query = {
   __typename?: "Query";
   chats: Array<Chat>;
   chat?: Maybe<Chat>;
+  users: Array<User>;
 };
 
 export type QueryChatArgs = {
@@ -229,6 +230,7 @@ export type QueryResolvers<
     ContextType,
     QueryChatArgs
   >;
+  users?: Resolver<Array<ResolversTypes["User"]>, ParentType, ContextType>;
 };
 
 export type SubscriptionResolvers<
