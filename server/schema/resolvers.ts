@@ -168,7 +168,7 @@ const resolvers: Resolvers = {
     },
 
     // removing chat by chatId and only if currentUser is one of participants, also, removing all the messages of that chat.
-    removeChat(root, { chatId }, { currentUser }) {
+    removeChat(root, { chatId }, { currentUser, pubsub }) {
       if (!currentUser) return null;
 
       const chatIndex = chats.findIndex(c => c.id === chatId);
@@ -194,6 +194,11 @@ const resolvers: Resolvers = {
       // Once messages are removed, removing 1 element from Chat with position of chatIndex
       chats.splice(chatIndex, 1);
 
+      pubsub.publish("chatRemoved", {
+        chatRemoved: chat.id,
+        targetChat: chat
+      });
+
       return chatId;
     }
   },
@@ -216,8 +221,19 @@ const resolvers: Resolvers = {
           return chatAdded.participants.some(p => p === currentUser.id);
         }
       )
-    }
-  }
+    },
+    // adding subscription for chatRemoved. It will broadcast to the current user only if he is a participant of published chat
+    chatRemoved: {
+      subscribe: withFilter(
+        (root, args, { pubsub }) => pubsub.asyncIterator("chatRemoved"),
+        ({ targetChat }: { targetChat: Chat }, args, { currentUser }) => {
+          if (!currentUser) return false;
+
+          return targetChat.participants.some(p => p === currentUser.id);
+        }
+      ),
+    },
+  },
 };
 
 export default resolvers;
