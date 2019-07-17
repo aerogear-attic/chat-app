@@ -84,7 +84,13 @@ const resolvers: Resolvers = {
       const chat = chats.find(c => c.id === chatId);
       if (!chat) return null;
       return chat.participants.includes(currentUser.id) ? chat : null;
-    }
+    },
+
+    // returning a list of users that are not the current logged in user. This is done to enable kind of a friends list for logged in user.
+    users(root, args, { currentUser }) {
+      if (!currentUser) return [];
+      return users.filter(u => u.id !== currentUser.id);
+    },
   },
 
   Mutation: {
