@@ -3,6 +3,7 @@ node_modules
 test-results
 yarn-error.log
 types/graphql.d.ts
+package-lock.json
 
 
 dist
