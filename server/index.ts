@@ -1,7 +1,9 @@
 import { ApolloServer, PubSub } from "apollo-server-express";
 import schema from "./schema";
 import { app } from "./app";
-import { origin, port } from "./env";
+import jwt from "jsonwebtoken";
+import cookie from "cookie";
+import { origin, port, secret } from "./env";
 
 // importing http protocol that will be used in order to install subscription handlers
 import http from "http";
@@ -15,10 +17,37 @@ const pubsub = new PubSub();
 // applying event listener and current "logged in" user to the context of apollo server
 const server = new ApolloServer({
   schema,
-  context: () => ({
-    currentUser: users.find(u => u.id === "1"),
-    pubsub
-  })
+  context: (session: any) => {
+    // Access the request object
+    let req = session.connection
+      ? session.connection.context.request
+      : session.req;
+
+    // It's subscription
+    if (session.connection) {
+      req.cookies = cookie.parse(req.headers.cookie || "");
+    }
+
+    let currentUser;
+    if (req.cookies.authToken) {
+      const username = jwt.verify(req.cookies.authToken, secret) as string;
+      currentUser = username && users.find(u => u.username === username);
+    }
+
+    return {
+      currentUser,
+      pubsub,
+      res: session.res
+    };
+  },
+  subscriptions: {
+    onConnect(params, ws, ctx) {
+      // pass the request object to context
+      return {
+        request: ctx.request
+      };
+    }
+  }
 });
 
 server.applyMiddleware({
