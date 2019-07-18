@@ -2,6 +2,9 @@ import { GraphQLDateTime } from "graphql-iso-date";
 import { User, Message, Chat, chats, messages, users } from "../db";
 import { Resolvers } from "../types/graphql";
 import { withFilter } from "graphql-subscriptions";
+import { secret, expiration } from "../env";
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 
 const resolvers: Resolvers = {
   Date: GraphQLDateTime,
@@ -95,6 +98,30 @@ const resolvers: Resolvers = {
   },
 
   Mutation: {
+    // singIn mutation takes in username and password
+    signIn(root, { username, password }, { res }) {
+      const user = users.find(u => u.username === username);
+
+      // if user does not exists:
+      if (!user) {
+        throw new Error("user not found");
+      }
+
+      // comparing raw password with encrypted password using bcrypt
+      const passwordsMatch = bcrypt.compareSync(password, user.password);
+
+      // if password is wrong:
+      if (!passwordsMatch) {
+        throw new Error("password is incorrect");
+      }
+
+      // auth token with username and secret
+      const authToken = jwt.sign(username, secret);
+
+      res.cookie("authToken", authToken, { maxAge: expiration });
+
+      return user;
+    },
     // addMessage mutation accept args chatId and content of the message and context currentUser and pubsub event emitter
     addMessage(root, { chatId, content }, { currentUser, pubsub }) {
       if (!currentUser) return null;

@@ -38,9 +38,15 @@ export type Message = {
 
 export type Mutation = {
   __typename?: "Mutation";
+  signIn?: Maybe<User>;
   addMessage?: Maybe<Message>;
   addChat?: Maybe<Chat>;
   removeChat?: Maybe<Scalars["ID"]>;
+};
+
+export type MutationSignInArgs = {
+  username: Scalars["String"];
+  password: Scalars["String"];
 };
 
 export type MutationAddMessageArgs = {
@@ -223,6 +229,12 @@ export type MutationResolvers<
   ContextType = MyContext,
   ParentType = ResolversParentTypes["Mutation"]
 > = {
+  signIn?: Resolver<
+    Maybe<ResolversTypes["User"]>,
+    ParentType,
+    ContextType,
+    MutationSignInArgs
+  >;
   addMessage?: Resolver<
     Maybe<ResolversTypes["Message"]>,
     ParentType,
