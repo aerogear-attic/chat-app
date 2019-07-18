@@ -8,13 +8,12 @@ import { origin, port, secret } from "./env";
 // importing http protocol that will be used in order to install subscription handlers
 import http from "http";
 
-// importing users from mock db to mock a logged in user with id 1 # line 19 & adding user with user ID 1 to context so it can be read by resolvers
+// importing users from mock db
 import { users } from "./db";
 
 // creating pubsub event listener
 const pubsub = new PubSub();
 
-// applying event listener and current "logged in" user to the context of apollo server
 const server = new ApolloServer({
   schema,
   context: (session: any) => {
@@ -49,10 +48,11 @@ const server = new ApolloServer({
     }
   }
 });
-
+// enabling server to receive and set cookies.
 server.applyMiddleware({
   app,
-  path: "/graphql"
+  path: "/graphql",
+  cors: { credentials: true, origin }
 });
 
 // once middleware was applied to the apollo server ( app and graphql ) applying http server for express app
