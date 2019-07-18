@@ -98,7 +98,7 @@ const resolvers: Resolvers = {
   },
 
   Mutation: {
-    // singIn mutation takes in username and password
+    // singIn mutation takes in username, password from input and response from the context
     signIn(root, { username, password }, { res }) {
       const user = users.find(u => u.username === username);
 
@@ -108,6 +108,7 @@ const resolvers: Resolvers = {
       }
 
       // comparing raw password with encrypted password using bcrypt
+      // compareSync takes in two arguments and returns true if they are same or false if not
       const passwordsMatch = bcrypt.compareSync(password, user.password);
 
       // if password is wrong:
@@ -118,6 +119,7 @@ const resolvers: Resolvers = {
       // auth token with username and secret
       const authToken = jwt.sign(username, secret);
 
+      // a cookie with authorisation token jwt is in response.
       res.cookie("authToken", authToken, { maxAge: expiration });
 
       return user;
