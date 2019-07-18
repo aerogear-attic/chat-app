@@ -231,9 +231,9 @@ const resolvers: Resolvers = {
 
           return targetChat.participants.some(p => p === currentUser.id);
         }
-      ),
-    },
-  },
+      )
+    }
+  }
 };
 
 export default resolvers;
