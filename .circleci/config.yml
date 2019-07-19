@@ -32,6 +32,9 @@ jobs:
           command: yarn test -u
       - store_test_results:
           path: test-results
+      - run:
+          name: run tslint
+          command: yarn lint
 
   build-client:
     working_directory: ~/chat-app/client # All the steps below are being run in the client directory
