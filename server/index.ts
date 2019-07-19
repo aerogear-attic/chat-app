@@ -24,6 +24,8 @@ const server = new ApolloServer({
 
     // It's subscription
     if (session.connection) {
+
+      // returns headers string from cookies or an empty string
       req.cookies = cookie.parse(req.headers.cookie || "");
     }
 
@@ -48,7 +50,7 @@ const server = new ApolloServer({
     }
   }
 });
-// enabling server to receive and set cookies.
+// enabling server to receive and set cookies and use of credentials sent in http get header
 server.applyMiddleware({
   app,
   path: "/graphql",
