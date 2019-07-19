@@ -5,7 +5,16 @@
         "tslint-eslint-rules",
         "tslint-config-prettier"
     ],
+    "linterOptions": {
+        "exclude": [
+            "**/graphql.d.ts"
+        ]
+    },
     "jsRules": {},
-    "rules": {},
+    "rules": {
+        "interface-over-type-literal": false,
+        "curly": [true, "ignore-same-line"],
+        "ordered-imports": false
+    },
     "rulesDirectory": []
 }
