@@ -104,7 +104,7 @@ const resolvers: Resolvers = {
   },
 
   Mutation: {
-    //
+    // setting up signUp mutation with validation rules, password is hashed using bcrypt
     signUp(root, { name, username, password, passwordConfirm }) {
       validateLength("req.name", name, 3, 50);
       validateLength("req.username", username, 3, 18);
