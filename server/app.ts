@@ -8,7 +8,8 @@ import { origin } from "./env";
 
 export const app = express();
 
-// enabling server to receive and set cookies.
+// enabling server to receive and set cookies by enabling credentials headers to true. This is set also by client to include credentials headers
+// with each HTTP request
 app.use(cors({ credentials: true, origin }));
 app.use(bodyParser.json());
 
