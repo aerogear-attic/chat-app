@@ -39,6 +39,7 @@ export type Message = {
 export type Mutation = {
   __typename?: "Mutation";
   signIn?: Maybe<User>;
+  signUp?: Maybe<User>;
   addMessage?: Maybe<Message>;
   addChat?: Maybe<Chat>;
   removeChat?: Maybe<Scalars["ID"]>;
@@ -47,6 +48,13 @@ export type Mutation = {
 export type MutationSignInArgs = {
   username: Scalars["String"];
   password: Scalars["String"];
+};
+
+export type MutationSignUpArgs = {
+  name: Scalars["String"];
+  username: Scalars["String"];
+  password: Scalars["String"];
+  passwordConfirm: Scalars["String"];
 };
 
 export type MutationAddMessageArgs = {
@@ -235,6 +243,12 @@ export type MutationResolvers<
     ParentType,
     ContextType,
     MutationSignInArgs
+  >;
+  signUp?: Resolver<
+    Maybe<ResolversTypes["User"]>,
+    ParentType,
+    ContextType,
+    MutationSignUpArgs
   >;
   addMessage?: Resolver<
     Maybe<ResolversTypes["Message"]>,
