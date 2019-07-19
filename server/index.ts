@@ -2,6 +2,7 @@ import { ApolloServer, PubSub } from "apollo-server-express";
 import schema from "./schema";
 import { app } from "./app";
 import jwt from "jsonwebtoken";
+// defines parsed cookie on req.cookie from cookie parser
 import cookie from "cookie";
 import { origin, port, secret } from "./env";
 
@@ -24,11 +25,11 @@ const server = new ApolloServer({
 
     // It's subscription
     if (session.connection) {
-
       // returns headers string from cookies or an empty string
       req.cookies = cookie.parse(req.headers.cookie || "");
     }
 
+    // decoding received cookie with JWT using same secret it was encoded with to get a user from db using username on users array.
     let currentUser;
     if (req.cookies.authToken) {
       const username = jwt.verify(req.cookies.authToken, secret) as string;

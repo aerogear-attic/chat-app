@@ -76,6 +76,11 @@ const resolvers: Resolvers = {
     }
   },
   Query: {
+    // sends a current user from the context to ensure that authToken references to a real user
+    me(root, args, { currentUser }) {
+      return currentUser || null;
+    },
+
     // chats return all chats that exist for current logged in user as all chats returned must include current user ID
     chats(root, args, { currentUser }) {
       if (!currentUser) return [];
@@ -119,7 +124,7 @@ const resolvers: Resolvers = {
       // auth token with username and secret
       const authToken = jwt.sign(username, secret);
 
-      // a cookie with authorisation token jwt is in response.
+      // sets a cookie with authToke which contains user name and secret, and expiration time to be send with response
       res.cookie("authToken", authToken, { maxAge: expiration });
 
       return user;
