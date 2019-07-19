@@ -67,6 +67,7 @@ export type Query = {
   chats: Array<Chat>;
   chat?: Maybe<Chat>;
   users: Array<User>;
+  me?: Maybe<User>;
 };
 
 export type QueryChatArgs = {
@@ -267,6 +268,7 @@ export type QueryResolvers<
     QueryChatArgs
   >;
   users?: Resolver<Array<ResolversTypes["User"]>, ParentType, ContextType>;
+  me?: Resolver<Maybe<ResolversTypes["User"]>, ParentType, ContextType>;
 };
 
 export type SubscriptionResolvers<
