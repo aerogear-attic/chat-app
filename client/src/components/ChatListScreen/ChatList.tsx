@@ -51,7 +51,7 @@ const MessageDate = styled.div`
   font-size: 13px;
 `;
 
-const getChatsQuery = gql`
+export const getChatsQuery = gql`
   query getChats {
     chats {
       id
