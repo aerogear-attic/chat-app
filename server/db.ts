@@ -1,3 +1,8 @@
+// importing pool to allow for a reusable pool of clients that will use the app
+// it basicly allows many users to use same queries at the same time...something like opening a connection between
+// a resource and a group of clients.
+import { Pool } from "pg";
+
 export type User = {
   id: string;
   name: string;
@@ -17,6 +22,18 @@ export type Chat = {
   messages: string[];
   participants: string[];
 };
+
+// configuring access to the database with user registered on whatsapp database on template1.
+export const dbConfig = {
+  host: "localhost",
+  port: process.env.DB_PORT ? parseInt(process.env.DB_PORT) : 5432,
+  user: "testuser",
+  password: "testpassword",
+  database: "whatsapp"
+};
+
+// creating a pool with db configuration from dbConfig.
+export let pool: Pool = new Pool(dbConfig);
 
 export const users: User[] = [];
 export const messages: Message[] = [];
