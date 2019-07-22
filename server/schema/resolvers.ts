@@ -99,6 +99,7 @@ const resolvers: Resolvers = {
       return rows;
     }
   },
+  
   Query: {
     me(root, args, { currentUser }) {
       return currentUser || null;
@@ -112,6 +113,8 @@ const resolvers: Resolvers = {
         WHERE chats.id = chats_users.chat_id
         AND chats_users.user_id = ${currentUser.id}
       `);
+
+      return rows;
     },
 
     async chat(root, { chatId }, { currentUser, db }) {
