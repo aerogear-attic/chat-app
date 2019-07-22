@@ -13,6 +13,7 @@ type Message {
     sender: User
     recipient: User
     isMine: Boolean!
+    chat: Chat!
 }
 
 type Chat{

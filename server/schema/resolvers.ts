@@ -1,83 +1,111 @@
 import { GraphQLDateTime } from "graphql-iso-date";
-import { User, Message, Chat, chats, messages, users } from "../db";
+import { Message, Chat, pool, chats } from "../db";
 import { Resolvers } from "../types/graphql";
 import { withFilter } from "graphql-subscriptions";
 import { secret, expiration } from "../env";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { validateLength, validatePassword } from "../validators";
+import sql from "sql-template-strings";
+
 
 const resolvers: Resolvers = {
   Date: GraphQLDateTime,
 
   Message: {
-    // finds the sender of the message by matching message.sender (string) with user.id (string)
-    sender(message) {
-      return users.find(u => u.id === message.sender) || null;
+    
+    createdAt(message) {
+      return new Date(message.created_at)
     },
 
-    // finds the recipient by matching user.id with message.recipent
-    recipient(message) {
-      return users.find(u => u.id === message.recipent) || null;
+    
+    async chat(message, args, { db }) {
+      const { rows } = await db.query(sql`
+      SELECT * FROM chats WHERE id = ${message.chat_id}
+      `);
+      return rows[0] || null
     },
-
-    // marks message send with sender equal to current "logged in" user, = 1, to identify which messages came from "logged in" user
+    
+    async sender(message, args, { db }){
+      const { rows } = await db.query(sql`
+      SELECT * FROM users WHERE id = ${message.sender_user_id}
+      `);
+      return rows[0] || null;
+    },
+    
+    async recipient(message, args, { db }){
+      const { rows } = await db.query(sql`
+      SELECT * FROM users WHERE id = ${message.sender_user_id}
+      AND chats_users.chat_id = ${message.chat_id}
+      `);
+      return rows[0] || null;
+    },
+    
     isMine(message, args, { currentUser }) {
-      return message.sender === currentUser.id;
+      return message.sender_user_id === currentUser.id;
     }
   },
 
   Chat: {
-    // name accepts chat as parent object, no arguments and current user from context
-    name(chat, args, { currentUser }) {
-      // if no user "logged in" is found its going to return null
+    
+    async name(chat, args, { currentUser, db }) { 
       if (!currentUser) return null;
 
-      // looking for participantId which equals to looking through array of participants of chat that have different ID than registered User
-      // for now, each chat room has only 2 users, logged in user and another user from user array.
-      const participantId = chat.participants.find(p => p !== currentUser.id);
+      const { rows } = await db.query(sql`
+      SELECT users.* FROM users, chats_users
+      WHERE users.id != ${currentUser.id}
+      AND users.id = chats_users.user_id
+      AND chats_users.chat_id = ${chat.id}`);
 
-      // if there is no other participant in chat room null value is returned
-      if (!participantId) return null;
+      const participant = rows[0];
 
-      // finding other participant by participant id comparison to user.id
-      const participant = users.find(u => u.id === participantId);
-
-      // grabbing participant name from user array using participant object created above
       return participant ? participant.name : null;
     },
 
-    picture(chat, args, { currentUser }) {
-      // same rules as with name except it return picture of the non logged in participant of chat room
+    async picture(chat, args, { currentUser, db }) {
       if (!currentUser) return null;
 
-      const participantId = chat.participants.find(p => p !== currentUser.id);
-
-      if (!participantId) return null;
-
-      const participant = users.find(u => u.id === participantId);
+      const { rows } = await db.query(sql`
+      SELECT users.* FROM users, chats_users
+      WHERE users.id != ${currentUser.id}
+      AND users.id = chats_users.user_id
+      AND chats_users.chat_id = ${chat.id}`);
+     
+      const participant = rows[0];
 
       return participant ? participant.picture : null;
     },
 
-    // returning messages that relate to parent chat object by message Id from message array in db.ts
-    messages(chat) {
-      return messages.filter(m => chat.messages.includes(m.id));
+    async messages(chat, args, { db }) {
+      const { rows } = await db.query(sql`
+      SELECT * FROM messages WHERE chat_id = ${chat.id}
+      `);
+      return rows;
     },
 
-    // returns last message from chat --- TODO: consider removing this after confirming with Milena that it is no longer required
-    lastMessage(chat) {
-      const lastMessage = chat.messages[chat.messages.length - 1];
-      return messages.find(m => m.id === lastMessage) || null;
+    async lastMessage(chat, args, { db }) {
+      const { rows } = await db.query(sql`
+      SELECT * FROM messages
+      WHERE chat_id = ${chat.id}
+      ORDER BY created_at DESC
+      LIMIT 1`);
+
+      return rows[0];
     },
 
-    // returns participants of chat room by matching participant ID with User Id
-    participants(chat) {
-      return chat.participants.map(p => users.find(u => u.id === p)) as User[];
-    }
+    async participants(chat, args, { db }) {
+      const { rows } = await db.query(sql`
+      SELECT users.* FROM users, chats_users
+      WHERE chats_users.chat.id = ${chat.id}
+      AND chats_users.user_id = users.id
+      `);
+
+      return rows;
+    },
   },
+
   Query: {
-    // sends a current user from the context to ensure that authToken references to a real user
+
     me(root, args, { currentUser }) {
       return currentUser || null;
     },
