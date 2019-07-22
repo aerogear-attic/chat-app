@@ -1,7 +1,7 @@
 import { GraphQLDateTime } from "graphql-iso-date";
-import { Message, Chat, pool, chats } from "../db";
+import { Message, Chat, pool } from "../db";
 import { Resolvers } from "../types/graphql";
-import { withFilter, PubSub } from "graphql-subscriptions";
+import { withFilter } from "graphql-subscriptions";
 import { secret, expiration } from "../env";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
@@ -16,6 +16,7 @@ const resolvers: Resolvers = {
       return new Date(message.created_at);
     },
 
+    // pulling all chats for an x user
     async chat(message, args, { db }) {
       const { rows } = await db.query(sql`
       SELECT * FROM chats WHERE id = ${message.chat_id}
@@ -23,6 +24,7 @@ const resolvers: Resolvers = {
       return rows[0] || null;
     },
 
+    // pulling a message sender details
     async sender(message, args, { db }) {
       const { rows } = await db.query(sql`
       SELECT * FROM users WHERE id = ${message.sender_user_id}
@@ -30,6 +32,7 @@ const resolvers: Resolvers = {
       return rows[0] || null;
     },
 
+    // pulling a recipient details -------------------------------------CHECK------------------------------------------------
     async recipient(message, args, { db }) {
       const { rows } = await db.query(sql`
       SELECT * FROM users WHERE id = ${message.sender_user_id}
@@ -38,12 +41,14 @@ const resolvers: Resolvers = {
       return rows[0] || null;
     },
 
+    // checking if message sent belongs to the current user
     isMine(message, args, { currentUser }) {
       return message.sender_user_id === currentUser.id;
     }
   },
 
   Chat: {
+    // pulling details of participant of chat that is not the current user but belongs to current user chat room
     async name(chat, args, { currentUser, db }) {
       if (!currentUser) return null;
 
@@ -58,6 +63,7 @@ const resolvers: Resolvers = {
       return participant ? participant.name : null;
     },
 
+    // pulling details of participant of chat that is not the current user but belongs to current user chat room
     async picture(chat, args, { currentUser, db }) {
       if (!currentUser) return null;
 
@@ -72,6 +78,7 @@ const resolvers: Resolvers = {
       return participant ? participant.picture : null;
     },
 
+    // pulling all messages for X chat room
     async messages(chat, args, { db }) {
       const { rows } = await db.query(sql`
       SELECT * FROM messages WHERE chat_id = ${chat.id}
@@ -79,32 +86,35 @@ const resolvers: Resolvers = {
       return rows;
     },
 
+    // pulling last message of X chat room
     async lastMessage(chat, args, { db }) {
       const { rows } = await db.query(sql`
       SELECT * FROM messages
       WHERE chat_id = ${chat.id}
       ORDER BY created_at DESC
-      LIMIT 1`);
-
+      LIMIT 1
+      `);
       return rows[0];
     },
 
+    // pulling both participants of X chat room
     async participants(chat, args, { db }) {
       const { rows } = await db.query(sql`
       SELECT users.* FROM users, chats_users
       WHERE chats_users.chat.id = ${chat.id}
       AND chats_users.user_id = users.id
       `);
-
       return rows;
     }
   },
-  
+
   Query: {
+    // returns current logged in user
     me(root, args, { currentUser }) {
       return currentUser || null;
     },
 
+    // pulls all chat ID's which current user is part of
     async chats(root, args, { currentUser, db }) {
       if (!currentUser) return [];
 
@@ -113,10 +123,10 @@ const resolvers: Resolvers = {
         WHERE chats.id = chats_users.chat_id
         AND chats_users.user_id = ${currentUser.id}
       `);
-
       return rows;
     },
 
+    // pulls X chat room that current user is part of
     async chat(root, { chatId }, { currentUser, db }) {
       if (!currentUser) return null;
 
@@ -129,6 +139,7 @@ const resolvers: Resolvers = {
       return rows[0] ? rows[0] : null;
     },
 
+    // return current user from DB
     async users(root, args, { currentUser, db }) {
       if (!currentUser) return [];
       const { rows } = await db.query(sql`
@@ -139,6 +150,7 @@ const resolvers: Resolvers = {
   },
 
   Mutation: {
+    // returns current user from DB, if not found creates a new user
     async signUp(root, { name, username, password, passwordConfirm }, { db }) {
       validateLength("req.name", name, 3, 50);
       validateLength("req.username", username, 3, 18);
@@ -168,6 +180,7 @@ const resolvers: Resolvers = {
       return user;
     },
 
+    // finds all users with current user username, compares password, and responds with cookie
     async signIn(root, { username, password }, { db, res }) {
       const { rows } = await db.query(sql`
         SELECT * FROM users WHERE username = ${username}
@@ -191,6 +204,7 @@ const resolvers: Resolvers = {
       return user;
     },
 
+    // adds message to the db, publishes messageAdded subscription
     async addMessage(root, { chatId, content }, { currentUser, pubsub, db }) {
       if (!currentUser) return null;
 
@@ -209,6 +223,7 @@ const resolvers: Resolvers = {
       return messageAdded;
     },
 
+    // creates a chat room between current user and a recipient, publish chat added subscription
     async addChat(root, { recipientId }, { currentUser, pubsub, db }) {
       if (!currentUser) return null;
 
@@ -257,6 +272,7 @@ const resolvers: Resolvers = {
       }
     },
 
+    // removes chat of X chat Id that belongs to current user, publish chat removed pubsub
     async removeChat(root, { chatId }, { currentUser, pubsub, db }) {
       if (!currentUser) return null;
 
@@ -296,6 +312,7 @@ const resolvers: Resolvers = {
     }
   },
 
+  // subscription for messageAdded where user ID equals current user and chat ID equals ID of message.chatId
   Subscription: {
     messageAdded: {
       subscribe: withFilter(
@@ -318,6 +335,7 @@ const resolvers: Resolvers = {
       )
     },
 
+    // subscription for chatAdded where subscribing user is the current user and chat subscribed to is the chat of created chatID
     chatAdded: {
       subscribe: withFilter(
         (root, args, { pubsub }) => pubsub.asyncIterator("chatAdded"),
@@ -333,7 +351,7 @@ const resolvers: Resolvers = {
         }
       )
     },
-
+    // subscription for removing a chat room for current user and chat room of chat id of removed chat room.
     chatRemoved: {
       subscribe: withFilter(
         (root, args, { pubsub }) => pubsub.asyncIterator("chatRemoved"),
