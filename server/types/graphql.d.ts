@@ -34,7 +34,7 @@ export type Message = {
   sender?: Maybe<User>;
   recipient?: Maybe<User>;
   isMine: Scalars["Boolean"];
-  chat: Scalars["String"];
+  chat?: Maybe<Chat>;
 };
 
 export type Mutation = {
@@ -233,7 +233,7 @@ export type MessageResolvers<
   sender?: Resolver<Maybe<ResolversTypes["User"]>, ParentType, ContextType>;
   recipient?: Resolver<Maybe<ResolversTypes["User"]>, ParentType, ContextType>;
   isMine?: Resolver<ResolversTypes["Boolean"], ParentType, ContextType>;
-  chat?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+  chat?: Resolver<Maybe<ResolversTypes["Chat"]>, ParentType, ContextType>;
 };
 
 export type MutationResolvers<
