@@ -6,7 +6,7 @@ import { createBrowserHistory } from 'history';
 import { mockApolloClient } from '../../test-helpers';
 import ChatList, { getChatsQuery } from './ChatList';
 
-describe('ChatsList', () => {
+describe('ChatList', () => {
   afterEach(() => {
     cleanup();
     window.location.pathname = '/';

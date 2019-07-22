@@ -71,13 +71,16 @@ interface ChatListProps {
 }
 
 const ChatList: React.FC<ChatListProps> = ({ history }) => {
-  const {
-    data: { chats = [] }
-  } = useQuery<any>(getChatsQuery);
+  const { data } = useQuery<any>(getChatsQuery);
 
   const navToChat = useCallback(chat => {
     history.push(`chats/${chat.id}`);
   }, [history]);
+
+  if (data === undefined || data.chats === undefined) {
+    return null;
+  }
+  const chats = data.chats;
 
   return (
     <Container>
