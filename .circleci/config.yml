@@ -18,6 +18,11 @@ jobs:
     working_directory: ~/chat-app/server # All the steps below are being run in the server directory
     docker:
       - image: circleci/node:lts
+      - image: postgres:11.4-alpine
+        environment:
+          POSTGRES_PASSWORD: testpassword
+          POSTGRES_USER: testuser
+          POSTGRES_DB: whatsapp
     steps:
       - checkout:
           path: ~/chat-app
