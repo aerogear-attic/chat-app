@@ -10,7 +10,7 @@ describe("Query.chats", () => {
 
   it("should fetch all chats", async () => {
     const { rows } = await pool.query(sql`SELECT * FROM users WHERE id = 1`);
-    const currentUser = rows[0];
+    let currentUser = rows[0];
     const server = new ApolloServer({
       schema,
       context: async () => ({

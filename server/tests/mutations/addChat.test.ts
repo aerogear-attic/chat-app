@@ -8,7 +8,7 @@ import { MyContext } from "../../context";
 describe("Mutation.addChat", () => {
   beforeEach(resetDb);
 
-  it('creates a new chat between two users, logged in user and a user from logged in user "friends list"', async () => {
+  it("creates a new chat between current user and specified recipient", async () => {
     const { rows } = await pool.query(sql`
     SELECT * FROM users WHERE id = 2
     `);
