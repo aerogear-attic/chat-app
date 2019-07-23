@@ -15,8 +15,18 @@ import { pool } from "./db";
 import { MyContext } from "./context";
 import sql from "sql-template-strings";
 
-// creating pubsub event listener
-const pubsub = new PubSub();
+// Implementation of postgres notify/listen for PubSub mechanism, as apollo pubsub is not for production usage
+// require instead of import from as graphql-postgres-subscription does not support typeScript
+const { PostgresPubSub } = require("graphql-postgres-subscriptions");
+
+// creating postgres pubsub event listener
+const pubsub = new PostgresPubSub({
+  host: "localhost",
+  port: process.env.DB_PORT ? parseInt(process.env.DB_PORT) : 5432,
+  user: "testuser",
+  password: "testpassword",
+  database: "whatsapp"
+});
 
 const server = new ApolloServer({
   schema,
