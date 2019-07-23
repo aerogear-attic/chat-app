@@ -101,7 +101,7 @@ const resolvers: Resolvers = {
     async participants(chat, args, { db }) {
       const { rows } = await db.query(sql`
       SELECT users.* FROM users, chats_users
-      WHERE chats_users.chat.id = ${chat.id}
+      WHERE chats_users.chat_id = ${chat.id}
       AND chats_users.user_id = users.id
       `);
       return rows;
@@ -139,7 +139,7 @@ const resolvers: Resolvers = {
       return rows[0] ? rows[0] : null;
     },
 
-    // return current user from DB
+    // return all users that are not current logged in user
     async users(root, args, { currentUser, db }) {
       if (!currentUser) return [];
       const { rows } = await db.query(sql`
@@ -228,35 +228,36 @@ const resolvers: Resolvers = {
       if (!currentUser) return null;
 
       const { rows } = await db.query(sql`
-      SELECT chats.* FROM chats, (SELECT * FROM chats_users WHERE user_id= ${currentUser.id}
-      AS chats_of_current_user, chats_users
-      WHERE chats_users.chat_id = chats_of_current_user.chat_id
-      AND chats.id = chats_users.chat_id
-      AND chats_users.user_id = ${recipientId}
-      )`);
+        SELECT * FROM chats, (SELECT * FROM chats_users WHERE user_id = ${currentUser.id}) AS chats_of_current_user, chats_users
+        WHERE chats_users.chat_id = chats_of_current_user.chat_id
+        AND chats.id = chats_users.chat_id
+        AND chats_users.user_id = ${recipientId}
+      `);
 
+      // If there is already a chat between these two users, return it
       if (rows[0]) {
         return rows[0];
       }
 
       try {
         await db.query("BEGIN");
+
         const { rows } = await db.query(sql`
-        INSERT INTO chats
-        DEFAULT VALUES
-        RETURNING *
+          INSERT INTO chats
+          DEFAULT VALUES
+          RETURNING *
         `);
 
         const chatAdded = rows[0];
 
         await db.query(sql`
-        INSERT INTO chats_users(chat_id, user_id)
-        VALUES(${chatAdded.id}, ${currentUser.id})
+          INSERT INTO chats_users(chat_id, user_id)
+          VALUES(${chatAdded.id}, ${currentUser.id})
         `);
 
         await db.query(sql`
-        INSERT INTO chats_user(chat_id, user_id)
-        VALUES(${chatAdded.id}, ${recipientId})
+          INSERT INTO chats_users(chat_id, user_id)
+          VALUES(${chatAdded.id}, ${recipientId})
         `);
 
         await db.query("COMMIT");
