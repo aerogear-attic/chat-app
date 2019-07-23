@@ -35,10 +35,6 @@ export const dbConfig = {
 // creating a pool with db configuration from dbConfig.
 export let pool: Pool = new Pool(dbConfig);
 
-export const users: User[] = [];
-export const messages: Message[] = [];
-export const chats: Chat[] = [];
-
 export const resetDb = async () => {
   await pool.query(sql`DELETE FROM users`);
   const sampleUsers = [
