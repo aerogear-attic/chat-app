@@ -39,23 +39,12 @@ export type Message = {
 
 export type Mutation = {
   __typename?: "Mutation";
-  signIn?: Maybe<User>;
-  signUp?: Maybe<User>;
   addMessage?: Maybe<Message>;
   addChat?: Maybe<Chat>;
   removeChat?: Maybe<Scalars["ID"]>;
-};
-
-export type MutationSignInArgs = {
-  username: Scalars["String"];
-  password: Scalars["String"];
-};
-
-export type MutationSignUpArgs = {
-  name: Scalars["String"];
-  username: Scalars["String"];
-  password: Scalars["String"];
-  passwordConfirm: Scalars["String"];
+  _dummy?: Maybe<Scalars["Boolean"]>;
+  signIn?: Maybe<User>;
+  signUp?: Maybe<User>;
 };
 
 export type MutationAddMessageArgs = {
@@ -71,12 +60,25 @@ export type MutationRemoveChatArgs = {
   chatId: Scalars["ID"];
 };
 
+export type MutationSignInArgs = {
+  username: Scalars["String"];
+  password: Scalars["String"];
+};
+
+export type MutationSignUpArgs = {
+  name: Scalars["String"];
+  username: Scalars["String"];
+  password: Scalars["String"];
+  passwordConfirm: Scalars["String"];
+};
+
 export type Query = {
   __typename?: "Query";
   chats: Array<Chat>;
   chat?: Maybe<Chat>;
-  users: Array<User>;
+  _dummy?: Maybe<Scalars["Boolean"]>;
   me?: Maybe<User>;
+  users: Array<User>;
 };
 
 export type QueryChatArgs = {
@@ -88,6 +90,7 @@ export type Subscription = {
   messageAdded: Message;
   chatAdded: Chat;
   chatRemoved: Scalars["ID"];
+  _dummy?: Maybe<Scalars["Boolean"]>;
 };
 
 export type User = {
@@ -240,18 +243,6 @@ export type MutationResolvers<
   ContextType = MyContext,
   ParentType = ResolversParentTypes["Mutation"]
 > = {
-  signIn?: Resolver<
-    Maybe<ResolversTypes["User"]>,
-    ParentType,
-    ContextType,
-    MutationSignInArgs
-  >;
-  signUp?: Resolver<
-    Maybe<ResolversTypes["User"]>,
-    ParentType,
-    ContextType,
-    MutationSignUpArgs
-  >;
   addMessage?: Resolver<
     Maybe<ResolversTypes["Message"]>,
     ParentType,
@@ -270,6 +261,19 @@ export type MutationResolvers<
     ContextType,
     MutationRemoveChatArgs
   >;
+  _dummy?: Resolver<Maybe<ResolversTypes["Boolean"]>, ParentType, ContextType>;
+  signIn?: Resolver<
+    Maybe<ResolversTypes["User"]>,
+    ParentType,
+    ContextType,
+    MutationSignInArgs
+  >;
+  signUp?: Resolver<
+    Maybe<ResolversTypes["User"]>,
+    ParentType,
+    ContextType,
+    MutationSignUpArgs
+  >;
 };
 
 export type QueryResolvers<
@@ -283,8 +287,9 @@ export type QueryResolvers<
     ContextType,
     QueryChatArgs
   >;
-  users?: Resolver<Array<ResolversTypes["User"]>, ParentType, ContextType>;
+  _dummy?: Resolver<Maybe<ResolversTypes["Boolean"]>, ParentType, ContextType>;
   me?: Resolver<Maybe<ResolversTypes["User"]>, ParentType, ContextType>;
+  users?: Resolver<Array<ResolversTypes["User"]>, ParentType, ContextType>;
 };
 
 export type SubscriptionResolvers<
@@ -303,6 +308,11 @@ export type SubscriptionResolvers<
   >;
   chatRemoved?: SubscriptionResolver<
     ResolversTypes["ID"],
+    ParentType,
+    ContextType
+  >;
+  _dummy?: SubscriptionResolver<
+    Maybe<ResolversTypes["Boolean"]>,
     ParentType,
     ContextType
   >;
