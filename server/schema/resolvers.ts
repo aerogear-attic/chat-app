@@ -7,11 +7,6 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { validateLength, validatePassword } from "../validators";
 import sql from "sql-template-strings";
-import axios from "axios";
-import { RandomPhoto } from "../types/unsplash";
-// adding safe api middleware
-import { trackProvider } from "@safe-api/middleware";
-import { resolve } from "path";
 
 const resolvers: Resolvers = {
   Date: GraphQLDateTime,
@@ -69,7 +64,7 @@ const resolvers: Resolvers = {
     },
 
     // pulling details of participant of chat that is not the current user but belongs to current user chat room
-    async picture(chat, args, { currentUser, db }) {
+    async picture(chat, args, { currentUser, db, dataSources }) {
       if (!currentUser) return null;
 
       const { rows } = await db.query(sql`
@@ -80,47 +75,9 @@ const resolvers: Resolvers = {
 
       const participant = rows[0];
 
-      if (participant && participant.picture) return participant.picture;
-
-      interface RandomPhotoInput {
-        query: string;
-        orientation: "landscape" | "portrait" | "squarish";
-      }
-
-      /* adding a random picture for participant from unsplash using axios which allows to make
-          http request from node and controlling the version and shape we got from the server using 
-          safe api middleware */
-
-      const trackedRandomPhoto = await trackProvider(
-        async ({ query, orientation }: RandomPhotoInput) =>
-          (await axios.get<RandomPhoto>(
-            "https://api.unsplash.com/photos/random",
-            {
-              params: {
-                query,
-                orientation
-              },
-              headers: {
-                Authorization:
-                  "Client-ID 4d048cfb4383b407eff92e4a2a5ec36c0a866be85e64caafa588c110efad350d"
-              }
-            }
-          )).data,
-        {
-          provider: "Unsplash",
-          method: "RandomPhoto",
-          location: resolve(__dirname, "../logs/main")
-        }
-      );
-      try {
-        return (await trackedRandomPhoto({
-          query: "portrait",
-          orientation: "squarish"
-        })).urls.small;
-      } catch (err) {
-        console.log("Cannot retrieve random photo:", err);
-        return null;
-      }
+      return participant && participant.picture
+        ? participant.picture
+        : dataSources.unsplashApi.getRandomPhoto();
     },
 
     // pulling all messages for X chat room
