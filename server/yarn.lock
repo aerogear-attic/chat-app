@@ -250,6 +250,24 @@
   dependencies:
     dependency-graph "0.8.0"
 
+"@graphql-modules/core@^0.7.8":
+  version "0.7.8"
+  resolved "https://registry.yarnpkg.com/@graphql-modules/core/-/core-0.7.8.tgz#3297ac53b5afed6f59a8c5a0bd02f2123cd730a2"
+  integrity sha512-gSkQRYVrPzLsOnwImzK0JSxbk8yvA23mNe2lXcv+rcnpvmUoDLgQWiQ7qkTJPoCMlp1L9jCgkgnFDjAIeELOBQ==
+  dependencies:
+    "@graphql-modules/di" "0.7.8"
+    apollo-server-caching "0.5.0"
+    graphql-toolkit "0.4.1"
+    tslib "1.10.0"
+
+"@graphql-modules/di@0.7.8":
+  version "0.7.8"
+  resolved "https://registry.yarnpkg.com/@graphql-modules/di/-/di-0.7.8.tgz#dd64293ddac990229743f3c8d0f70ab483fd3af5"
+  integrity sha512-JCvaO3bETYbTzRaPD/SW1v8euLlv68regWlhnixRsOtlKX026/6bFmXNFCh1l/F9j7EhD9PmiBq+iLRI277cGQ==
+  dependencies:
+    events "3.0.0"
+    tslib "1.10.0"
+
 "@jest/console@^24.7.1":
   version "24.7.1"
   resolved "https://registry.yarnpkg.com/@jest/console/-/console-24.7.1.tgz#32a9e42535a97aedfe037e725bd67e954b459545"
@@ -2097,6 +2115,11 @@ eventemitter3@^3.1.0:
   resolved "https://registry.yarnpkg.com/eventemitter3/-/eventemitter3-3.1.2.tgz#2d3d48f9c346698fce83a85d7d664e98535df6e7"
   integrity sha512-tvtQIeLVHjDkJYnzf2dgVMxfuSGJeM/7UCG17TT4EumTfNtF+0nebF/4zWOIkCreAbtNqhGEboB6BWrwqNaw4Q==
 
+events@3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/events/-/events-3.0.0.tgz#9a0a0dfaf62893d92b875b8f2698ca4114973e88"
+  integrity sha512-Dc381HFWJzEOhQ+d8pkNon++bk9h6cdAoAj4iE6Q4y6xgTzySWXlKn05/TVNpjnfRqi/X0EpJEJohPjNI3zpVA==
+
 exec-sh@^0.3.2:
   version "0.3.2"
   resolved "https://registry.yarnpkg.com/exec-sh/-/exec-sh-0.3.2.tgz#6738de2eb7c8e671d0366aea0b0db8c6f7d7391b"
@@ -2559,6 +2582,25 @@ graphql-toolkit@0.3.4:
     is-glob "4.0.1"
     is-valid-path "0.1.1"
     lodash "4.17.14"
+    tslib "^1.9.3"
+    valid-url "1.0.9"
+
+graphql-toolkit@0.4.1:
+  version "0.4.1"
+  resolved "https://registry.yarnpkg.com/graphql-toolkit/-/graphql-toolkit-0.4.1.tgz#f5a9fa225b51168dd0d0558dc59e8fc3d379e9b1"
+  integrity sha512-asTRlNn0381f6/wVp8F0X2vsz8GJnv4TX+KNHg1k8Ybe6Ii5HBreJTxBHJ7GXlNDhj5MGCNi09nt8Oe7Ategrg==
+  dependencies:
+    "@kamilkisiela/graphql-tools" "4.0.6"
+    "@types/glob" "7.1.1"
+    aggregate-error "3.0.0"
+    asyncro "^3.0.0"
+    cross-fetch "^3.0.4"
+    deepmerge "4.0.0"
+    glob "7.1.4"
+    graphql-import "0.7.1"
+    is-glob "4.0.1"
+    is-valid-path "0.1.1"
+    lodash "4.17.15"
     tslib "^1.9.3"
     valid-url "1.0.9"
 
@@ -3831,7 +3873,7 @@ lodash@4.17.14, lodash@^4.17.11, lodash@^4.17.12, lodash@^4.17.4, lodash@^4.2.0:
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.14.tgz#9ce487ae66c96254fe20b599f21b6816028078ba"
   integrity sha512-mmKYbW3GLuJeX+iGP+Y7Gp1AiGHGbXHCOh/jZmrawMmsE7MS4znI3RL2FsjbqOyMayHInjOeykW7PEajUk1/xw==
 
-lodash@^4.17.15:
+lodash@4.17.15, lodash@^4.17.15:
   version "4.17.15"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.15.tgz#b447f6670a0455bbfeedd11392eff330ea097548"
   integrity sha512-8xOcRHvCjnocdS5cpwXQXVzmmh5e5+saE2QGoeQmbKmRS6J3VQppPOIt0MnmE+4xlZoumy0GPG0D0MVIQbNA1A==
