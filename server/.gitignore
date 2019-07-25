@@ -2,8 +2,8 @@ node_modules
 *.log
 test-results
 yarn-error.log
-types/graphql.d.ts
 package-lock.json
-
+types/graphql.d.ts
+types/unsplash.d.ts
 
 dist
