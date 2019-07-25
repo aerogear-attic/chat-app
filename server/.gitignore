@@ -4,6 +4,6 @@ test-results
 yarn-error.log
 package-lock.json
 types/graphql.d.ts
-types/unsplash.d.ts
+
 
 dist
