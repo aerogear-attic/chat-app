@@ -15,6 +15,9 @@ import { pool } from "./db";
 import { MyContext } from "./context";
 import sql from "sql-template-strings";
 
+// importing unsplash api
+import { UnsplashApi } from "./schema/unsplash.api";
+
 // Implementation of postgres notify/listen for PubSub mechanism, as apollo pubsub is not for production usage
 // require instead of import from as graphql-postgres-subscription does not support typeScript
 const { PostgresPubSub } = require("graphql-postgres-subscriptions");
@@ -80,7 +83,11 @@ const server = new ApolloServer({
   formatResponse: (res: any, { context }: { context: MyContext }) => {
     context.db.release();
     return res;
-  }
+  },
+  // insterting data source into the context as dataSources so its accessible for resolvers
+  dataSources: () => ({
+    unsplashApi: new UnsplashApi()
+  })
 });
 // enabling server to receive and set cookies and use of credentials sent in http get header
 server.applyMiddleware({
