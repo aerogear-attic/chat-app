@@ -7,6 +7,7 @@ generates:
       - typescript-resolvers
     config:
        # defining typescript type of content for subscriptions - uses context.ts
+      useIndexSignature: true
       contextType: ../context#MyContext
       mappers:
         # import { Message } from '../db'

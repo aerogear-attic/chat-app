@@ -2,8 +2,11 @@ import { gql, withFilter } from "apollo-server-express";
 import sql from "sql-template-strings";
 import { Message, Chat, pool } from "../../db";
 import { Resolvers } from "../../types/graphql";
+import { GraphQLModule } from "@graphql-modules/core";
+import commonModule from "../common";
+import usersModule from "../users";
 
-export const typeDefs = gql`
+const typeDefs = gql`
   type Message {
     id: ID!
     content: String!
@@ -37,7 +40,7 @@ export const typeDefs = gql`
   }
 `;
 
-export const resolvers: Resolvers = {
+const resolvers: Resolvers = {
   Message: {
     createdAt(message) {
       return new Date(message.created_at);
@@ -331,3 +334,10 @@ export const resolvers: Resolvers = {
     }
   }
 };
+
+export default new GraphQLModule({
+  name: "chats",
+  typeDefs,
+  resolvers,
+  imports: () => [commonModule, usersModule]
+});

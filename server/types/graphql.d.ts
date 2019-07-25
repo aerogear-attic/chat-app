@@ -99,6 +99,8 @@ export type User = {
   name: Scalars["String"];
   picture?: Maybe<Scalars["String"]>;
 };
+export type WithIndex<TObject> = TObject & Record<string, any>;
+export type ResolversObject<TObject> = WithIndex<TObject>;
 
 export type ResolverTypeWrapper<T> = Promise<T> | T;
 
@@ -170,7 +172,7 @@ export type DirectiveResolverFn<
 ) => TResult | Promise<TResult>;
 
 /** Mapping between all available schema types and the resolvers types */
-export type ResolversTypes = {
+export type ResolversTypes = ResolversObject<{
   Query: ResolverTypeWrapper<{}>;
   Chat: ResolverTypeWrapper<Chat>;
   ID: ResolverTypeWrapper<Scalars["ID"]>;
@@ -181,10 +183,10 @@ export type ResolversTypes = {
   Boolean: ResolverTypeWrapper<Scalars["Boolean"]>;
   Mutation: ResolverTypeWrapper<{}>;
   Subscription: ResolverTypeWrapper<{}>;
-};
+}>;
 
 /** Mapping between all available schema types and the resolvers parents */
-export type ResolversParentTypes = {
+export type ResolversParentTypes = ResolversObject<{
   Query: {};
   Chat: Chat;
   ID: Scalars["ID"];
@@ -195,12 +197,12 @@ export type ResolversParentTypes = {
   Boolean: Scalars["Boolean"];
   Mutation: {};
   Subscription: {};
-};
+}>;
 
 export type ChatResolvers<
   ContextType = MyContext,
   ParentType = ResolversParentTypes["Chat"]
-> = {
+> = ResolversObject<{
   id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>;
   name?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>;
   picture?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>;
@@ -219,7 +221,7 @@ export type ChatResolvers<
     ParentType,
     ContextType
   >;
-};
+}>;
 
 export interface DateScalarConfig
   extends GraphQLScalarTypeConfig<ResolversTypes["Date"], any> {
@@ -229,7 +231,7 @@ export interface DateScalarConfig
 export type MessageResolvers<
   ContextType = MyContext,
   ParentType = ResolversParentTypes["Message"]
-> = {
+> = ResolversObject<{
   id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>;
   content?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
   createdAt?: Resolver<ResolversTypes["Date"], ParentType, ContextType>;
@@ -237,12 +239,12 @@ export type MessageResolvers<
   recipient?: Resolver<Maybe<ResolversTypes["User"]>, ParentType, ContextType>;
   isMine?: Resolver<ResolversTypes["Boolean"], ParentType, ContextType>;
   chat?: Resolver<Maybe<ResolversTypes["Chat"]>, ParentType, ContextType>;
-};
+}>;
 
 export type MutationResolvers<
   ContextType = MyContext,
   ParentType = ResolversParentTypes["Mutation"]
-> = {
+> = ResolversObject<{
   addMessage?: Resolver<
     Maybe<ResolversTypes["Message"]>,
     ParentType,
@@ -274,12 +276,12 @@ export type MutationResolvers<
     ContextType,
     MutationSignUpArgs
   >;
-};
+}>;
 
 export type QueryResolvers<
   ContextType = MyContext,
   ParentType = ResolversParentTypes["Query"]
-> = {
+> = ResolversObject<{
   chats?: Resolver<Array<ResolversTypes["Chat"]>, ParentType, ContextType>;
   chat?: Resolver<
     Maybe<ResolversTypes["Chat"]>,
@@ -290,12 +292,12 @@ export type QueryResolvers<
   _dummy?: Resolver<Maybe<ResolversTypes["Boolean"]>, ParentType, ContextType>;
   me?: Resolver<Maybe<ResolversTypes["User"]>, ParentType, ContextType>;
   users?: Resolver<Array<ResolversTypes["User"]>, ParentType, ContextType>;
-};
+}>;
 
 export type SubscriptionResolvers<
   ContextType = MyContext,
   ParentType = ResolversParentTypes["Subscription"]
-> = {
+> = ResolversObject<{
   messageAdded?: SubscriptionResolver<
     ResolversTypes["Message"],
     ParentType,
@@ -316,18 +318,18 @@ export type SubscriptionResolvers<
     ParentType,
     ContextType
   >;
-};
+}>;
 
 export type UserResolvers<
   ContextType = MyContext,
   ParentType = ResolversParentTypes["User"]
-> = {
+> = ResolversObject<{
   id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>;
   name?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
   picture?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>;
-};
+}>;
 
-export type Resolvers<ContextType = MyContext> = {
+export type Resolvers<ContextType = MyContext> = ResolversObject<{
   Chat?: ChatResolvers<ContextType>;
   Date?: GraphQLScalarType;
   Message?: MessageResolvers<ContextType>;
@@ -335,7 +337,7 @@ export type Resolvers<ContextType = MyContext> = {
   Query?: QueryResolvers<ContextType>;
   Subscription?: SubscriptionResolvers<ContextType>;
   User?: UserResolvers<ContextType>;
-};
+}>;
 
 /**
  * @deprecated
