@@ -2,6 +2,7 @@ schema: ./schema/typeDefs.graphql
 overwrite: true
 generates:
   ./types/graphql.d.ts:
+    schema: ./schema/typeDefs.graphql
     plugins:
       - typescript
       - typescript-resolvers
@@ -17,3 +18,7 @@ generates:
       scalars:
         # e.g. Message.createdAt will be of type Date
         Date: Date
+  ./types/unsplash.d.ts:
+    schema: ./logs/main/Unsplash.RandomPhoto.graphql
+    plugins:
+      - typescript
