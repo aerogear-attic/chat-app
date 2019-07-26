@@ -1,30 +1,14 @@
 import { createTestClient } from "apollo-server-testing";
-import { ApolloServer, PubSub, gql } from "apollo-server-express";
-import schema from "../../schema";
-import { resetDb, pool } from "../../db";
-import sql from "sql-template-strings";
-import { MyContext } from "../../context";
+import { gql } from "apollo-server-express";
+import { server } from "../../server";
+import { resetDb } from "../../db";
+import { mockAuth } from "../mocks/auth.provider";
 
 describe("Mutation.removeChat", () => {
   beforeEach(resetDb);
 
   it("remove chat by id", async () => {
-    const { rows } = await pool.query(sql`
-    SELECT * FROM users WHERE id = 1
-    `);
-    const currentUser = rows[0];
-    const server = new ApolloServer({
-      schema,
-      context: async () => ({
-        pubsub: new PubSub(),
-        currentUser,
-        db: await pool.connect()
-      }),
-      formatResponse: (res: any, { context }: { context: MyContext }) => {
-        context.db.release();
-        return res;
-      }
-    });
+    mockAuth(1);
 
     const { query, mutate } = createTestClient(server);
 

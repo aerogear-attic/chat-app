@@ -10,7 +10,7 @@ Object {
       "id": "1",
     },
     "name": "Ethan Gonzalez",
-    "picture": "https://randomuser.me/api/portraits/thumb/men/1.jpg",
+    "picture": null,
   },
 }
 `;
