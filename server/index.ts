@@ -1,28 +1,7 @@
-import "reflect-metadata";
-import { ApolloServer } from "apollo-server-express";
 import { app } from "./app";
-import { GraphQLModule } from "@graphql-modules/core";
-import usersModule from "./modules/users";
-import chatsModule from "./modules/chats";
 import { origin, port } from "./env";
 import http from "http";
-import { MyContext } from "./context";
-
-export const rootModule = new GraphQLModule({
-  name: "root",
-  imports: [usersModule, chatsModule]
-});
-
-const server = new ApolloServer({
-  schema: rootModule.schema,
-  context: rootModule.context,
-  subscriptions: rootModule.subscriptions,
-  // terminating db connection
-  formatResponse: (res: any, { context }: { context: MyContext }) => {
-    context.db.release();
-    return res;
-  }
-});
+import { server } from "./server";
 
 // enabling server to receive and set cookies and use of credentials sent in http get header
 server.applyMiddleware({

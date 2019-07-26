@@ -13,7 +13,7 @@ Object {
         },
       ],
       "name": "Ethan Gonzalez",
-      "picture": "https://randomuser.me/api/portraits/thumb/men/1.jpg",
+      "picture": null,
     },
     Object {
       "id": "2",
@@ -25,7 +25,7 @@ Object {
         },
       ],
       "name": "Bryan Wallace",
-      "picture": "https://randomuser.me/api/portraits/thumb/men/2.jpg",
+      "picture": null,
     },
     Object {
       "id": "3",
@@ -37,7 +37,7 @@ Object {
         },
       ],
       "name": "Avery Stewart",
-      "picture": "https://randomuser.me/api/portraits/thumb/women/1.jpg",
+      "picture": null,
     },
     Object {
       "id": "4",
@@ -49,7 +49,7 @@ Object {
         },
       ],
       "name": "Katie Peterson",
-      "picture": "https://randomuser.me/api/portraits/thumb/women/2.jpg",
+      "picture": null,
     },
   ],
 }
