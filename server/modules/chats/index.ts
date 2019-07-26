@@ -1,16 +1,20 @@
 import { gql, withFilter } from "apollo-server-express";
-import sql from "sql-template-strings";
-import { Message, Chat, pool } from "../../db";
+import { Message, Chat } from "../../db";
 import { Resolvers } from "../../types/graphql";
 import { GraphQLModule } from "@graphql-modules/core";
 import commonModule from "../common";
 import usersModule from "../users";
+import { UnsplashApi } from "./unsplash.api";
+import { Users } from "./../users/users.provider";
+import { Chats } from "./chats.provider";
+import { PubSub } from "../common/pubsub.provider";
+import { Auth } from "./../users/auth.provider";
 
 const typeDefs = gql`
   type Message {
     id: ID!
     content: String!
-    createdAt: Date!
+    createdAt: DateTime!
     sender: User
     recipient: User
     isMine: Boolean!
@@ -47,233 +51,119 @@ const resolvers: Resolvers = {
     },
 
     // pulling all chats for an x user
-    async chat(message, args, { db }) {
-      const { rows } = await db.query(sql`
-      SELECT * FROM chats WHERE id = ${message.chat_id}
-      `);
-      return rows[0] || null;
+    async chat(message, args, { injector }) {
+      return injector.get(Chats).findChatById(message.chat_id);
     },
 
     // pulling a message sender details
-    async sender(message, args, { db }) {
-      const { rows } = await db.query(sql`
-      SELECT * FROM users WHERE id = ${message.sender_user_id}
-      `);
-      return rows[0] || null;
+    async sender(message, args, { injector }) {
+      return injector.get(Users).findById(message.sender_user_id);
     },
 
     // pulling a recipient details -------------------------------------CHECK------------------------------------------------
-    async recipient(message, args, { db }) {
-      const { rows } = await db.query(sql`
-      SELECT * FROM users WHERE id = ${message.sender_user_id}
-      AND chats_users.chat_id = ${message.chat_id}
-      `);
-      return rows[0] || null;
+    async recipient(message, args, { injector }) {
+      return injector.get(Chats).firstRecipient({
+        chatId: message.chat_id,
+        userId: message.sender_user_id
+      });
     },
 
     // checking if message sent belongs to the current user
-    isMine(message, args, { currentUser }) {
-      return message.sender_user_id === currentUser.id;
+    async isMine(message, args, { injector }) {
+      const currentUser = await injector.get(Auth).currentUser();
+      return message.sender_user_id === currentUser!.id;
     }
   },
 
   Chat: {
     // pulling details of participant of chat that is not the current user but belongs to current user chat room
-    async name(chat, args, { currentUser, db }) {
+    async name(chat, args, { injector }) {
+      const currentUser = await injector.get(Auth).currentUser();
       if (!currentUser) return null;
-
-      const { rows } = await db.query(sql`
-      SELECT users.* FROM users, chats_users
-      WHERE users.id != ${currentUser.id}
-      AND users.id = chats_users.user_id
-      AND chats_users.chat_id = ${chat.id}`);
-
-      const participant = rows[0];
+      const participant = await injector.get(Chats).firstRecipient({
+        chatId: chat.id,
+        userId: currentUser.id
+      });
 
       return participant ? participant.name : null;
     },
 
     // pulling details of participant of chat that is not the current user but belongs to current user chat room
-    async picture(chat, args, { currentUser, db, dataSources }) {
+    async picture(chat, args, { currentUser, db, injector }) {
       if (!currentUser) return null;
 
-      const { rows } = await db.query(sql`
-      SELECT users.* FROM users, chats_users
-      WHERE users.id != ${currentUser.id}
-      AND users.id = chats_users.user_id
-      AND chats_users.chat_id = ${chat.id}`);
-
-      const participant = rows[0];
+      const participant = await injector.get(Chats).firstRecipient({
+        chatId: chat.id,
+        userId: currentUser.id
+      });
 
       return participant && participant.picture
         ? participant.picture
-        : dataSources.unsplashApi.getRandomPhoto();
+        : injector.get(UnsplashApi).getRandomPhoto();
     },
 
     // pulling all messages for X chat room
-    async messages(chat, args, { db }) {
-      const { rows } = await db.query(sql`
-      SELECT * FROM messages WHERE chat_id = ${chat.id}
-      `);
-      return rows;
+    async messages(chat, args, { injector }) {
+      return injector.get(Chats).findMessagesByChat(chat.id);
     },
 
     // pulling last message of X chat room
-    async lastMessage(chat, args, { db }) {
-      const { rows } = await db.query(sql`
-      SELECT * FROM messages
-      WHERE chat_id = ${chat.id}
-      ORDER BY created_at DESC
-      LIMIT 1
-      `);
-      return rows[0];
+    async lastMessage(chat, args, { injector }) {
+      return injector.get(Chats).lastMessage(chat.id);
     },
 
     // pulling both participants of X chat room
-    async participants(chat, args, { db }) {
-      const { rows } = await db.query(sql`
-      SELECT users.* FROM users, chats_users
-      WHERE chats_users.chat_id = ${chat.id}
-      AND chats_users.user_id = users.id
-      `);
-      return rows;
+    async participants(chat, args, { injector }) {
+      return injector.get(Chats).participants(chat.id);
     }
   },
 
   Query: {
     // pulls all chat ID's which current user is part of
-    async chats(root, args, { currentUser, db }) {
+    async chats(root, args, { injector }) {
+      const currentUser = await injector.get(Auth).currentUser();
       if (!currentUser) return [];
 
-      const { rows } = await db.query(sql`
-        SELECT chats.* FROM chats, chats_users
-        WHERE chats.id = chats_users.chat_id
-        AND chats_users.user_id = ${currentUser.id}
-      `);
-      return rows;
+      return injector.get(Chats).findChatsByUser(currentUser.id);
     },
 
     // pulls X chat room that current user is part of
-    async chat(root, { chatId }, { currentUser, db }) {
+    async chat(root, { chatId }, { injector }) {
+      const currentUser = await injector.get(Auth).currentUser();
       if (!currentUser) return null;
 
-      const { rows } = await db.query(sql`
-      SELECT chats.* FROM chats, chats_users
-      WHERE chats_users.chat_id = ${chatId}
-      AND chats.id = chats_users.chat_id
-      AND chats_users.user_id = ${currentUser.id}
-      `);
-      return rows[0] ? rows[0] : null;
+      return injector
+        .get(Chats)
+        .findChatByUser({ chatId, userId: currentUser.id });
     }
   },
 
   Mutation: {
     // adds message to the db, publishes messageAdded subscription
-    async addMessage(root, { chatId, content }, { currentUser, pubsub, db }) {
+    async addMessage(root, { chatId, content }, { injector }) {
+      const currentUser = await injector.get(Auth).currentUser();
       if (!currentUser) return null;
-
-      const { rows } = await db.query(sql`
-      INSERT INTO messages(chat_id, sender_user_id, content)
-      VALUES(${chatId}, ${currentUser.id}, ${content})
-      RETURNING *
-      `);
-
-      const messageAdded = rows[0];
-
-      pubsub.publish("messageAdded", {
-        messageAdded
-      });
-
-      return messageAdded;
+      return injector
+        .get(Chats)
+        .addMessage({ chatId, content, userId: currentUser.id });
     },
 
     // creates a chat room between current user and a recipient, publish chat added subscription
-    async addChat(root, { recipientId }, { currentUser, pubsub, db }) {
+    async addChat(root, { recipientId }, { injector }) {
+      const currentUser = await injector.get(Auth).currentUser();
       if (!currentUser) return null;
 
-      const { rows } = await db.query(sql`
-        SELECT * FROM chats, (SELECT * FROM chats_users WHERE user_id = ${currentUser.id}) AS chats_of_current_user, chats_users
-        WHERE chats_users.chat_id = chats_of_current_user.chat_id
-        AND chats.id = chats_users.chat_id
-        AND chats_users.user_id = ${recipientId}
-      `);
-
-      // If there is already a chat between these two users, return it
-      if (rows[0]) {
-        return rows[0];
-      }
-
-      try {
-        await db.query("BEGIN");
-
-        const { rows } = await db.query(sql`
-          INSERT INTO chats
-          DEFAULT VALUES
-          RETURNING *
-        `);
-
-        const chatAdded = rows[0];
-
-        await db.query(sql`
-          INSERT INTO chats_users(chat_id, user_id)
-          VALUES(${chatAdded.id}, ${currentUser.id})
-        `);
-
-        await db.query(sql`
-          INSERT INTO chats_users(chat_id, user_id)
-          VALUES(${chatAdded.id}, ${recipientId})
-        `);
-
-        await db.query("COMMIT");
-
-        pubsub.publish("chatAdded", {
-          chatAdded
-        });
-
-        return chatAdded;
-      } catch (e) {
-        await db.query("ROLLBACK");
-        throw e;
-      }
+      return injector
+        .get(Chats)
+        .addChat({ recipientId, userId: currentUser.id });
     },
 
     // removes chat of X chat Id that belongs to current user, publish chat removed pubsub
-    async removeChat(root, { chatId }, { currentUser, pubsub, db }) {
+    async removeChat(root, { chatId }, { injector }) {
+      const currentUser = await injector.get(Auth).currentUser();
       if (!currentUser) return null;
 
-      try {
-        await db.query("BEGIN");
-
-        const { rows } = await db.query(sql`
-        SELECT chats.* FROM chats, chats_users
-        WHERE id = ${chatId}
-        AND chats.id = chats_users.chat_id
-        AND chats_users.user_id = ${currentUser.id}
-        `);
-
-        const chat = rows[0];
-
-        if (!chat) {
-          await db.query("ROLLBACK");
-          return null;
-        }
-
-        await db.query(sql`
-        DELETE FROM chats WHERE chats.id = ${chatId}
-        `);
-
-        pubsub.publish("chatRemoved", {
-          chatRemoved: chat.id,
-          targetChat: chat
-        });
-
-        await db.query("COMMIT");
-
-        return chatId;
-      } catch (e) {
-        await db.query("ROLLBACK");
-        throw e;
-      }
+      return injector.get(Chats).removeChat({ chatId, userId: currentUser.id });
     }
   },
 
@@ -281,21 +171,20 @@ const resolvers: Resolvers = {
   Subscription: {
     messageAdded: {
       subscribe: withFilter(
-        (root, args, { pubsub }) => pubsub.asyncIterator("messageAdded"),
+        (root, args, { injector }) =>
+          injector.get(PubSub).asyncIterator("messageAdded"),
         async (
           { messageAdded }: { messageAdded: Message },
           args,
-          { currentUser }
+          { injector }
         ) => {
+          const currentUser = await injector.get(Auth).currentUser();
           if (!currentUser) return false;
 
-          const { rows } = await pool.query(sql`
-        SELECT * FROM chats_users
-        WHERE chat_id = ${messageAdded.chat_id}
-        AND user_id = ${currentUser.id}
-        `);
-
-          return !!rows.length;
+          return injector.get(Chats).isParticipant({
+            chatId: messageAdded.chat_id,
+            userId: currentUser.id
+          });
         }
       )
     },
@@ -303,16 +192,16 @@ const resolvers: Resolvers = {
     // subscription for chatAdded where subscribing user is the current user and chat subscribed to is the chat of created chatID
     chatAdded: {
       subscribe: withFilter(
-        (root, args, { pubsub }) => pubsub.asyncIterator("chatAdded"),
-        async ({ chatAdded }: { chatAdded: Chat }, args, { currentUser }) => {
+        (root, args, { injector }) =>
+          injector.get(PubSub).asyncIterator("chatAdded"),
+        async ({ chatAdded }: { chatAdded: Chat }, args, { injector }) => {
+          const currentUser = await injector.get(Auth).currentUser();
           if (!currentUser) return false;
 
-          const { rows } = await pool.query(sql`
-          SELECT * FROM chats_users
-          WHERE chat_id = ${chatAdded.id}
-          AND user_id = ${currentUser.id}
-          `);
-          return !!rows.length;
+          return injector.get(Chats).isParticipant({
+            chatId: chatAdded.id,
+            userId: currentUser.id
+          });
         }
       )
     },
@@ -320,15 +209,14 @@ const resolvers: Resolvers = {
     chatRemoved: {
       subscribe: withFilter(
         (root, args, { pubsub }) => pubsub.asyncIterator("chatRemoved"),
-        async ({ targetChat }: { targetChat: Chat }, args, { currentUser }) => {
+        async ({ targetChat }: { targetChat: Chat }, args, { injector }) => {
+          const currentUser = await injector.get(Auth).currentUser();
           if (!currentUser) return false;
 
-          const { rows } = await pool.query(sql`
-          SELECT * FROM chats_users
-          WHERE chat_id = ${targetChat.id}
-          AND user_id = ${currentUser.id}
-          `);
-          return !!rows.length;
+          return injector.get(Chats).isParticipant({
+            chatId: targetChat.id,
+            userId: currentUser.id
+          });
         }
       )
     }
@@ -339,5 +227,6 @@ export default new GraphQLModule({
   name: "chats",
   typeDefs,
   resolvers,
-  imports: () => [commonModule, usersModule]
+  imports: () => [commonModule, usersModule],
+  providers: () => [UnsplashApi, Chats]
 });

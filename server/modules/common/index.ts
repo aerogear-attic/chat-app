@@ -3,13 +3,17 @@ import { GraphQLDateTime } from "graphql-iso-date";
 import { Resolvers } from "../../types/graphql";
 import { GraphQLModule } from "@graphql-modules/core";
 import { pool } from "../../db";
+import { Pool } from "pg";
+import { Database } from "./database.provider";
+import { ProviderScope } from "@graphql-modules/di";
+import { PubSub } from "./pubsub.provider";
 
 // Implementation of postgres notify/listen for PubSub mechanism, as apollo pubsub is not for production usage
 // require instead of import from as graphql-postgres-subscription does not support typeScript
 const { PostgresPubSub } = require("graphql-postgres-subscriptions");
 
 const typeDefs = gql`
-  scalar Date
+  scalar DateTime
   type Query {
     _dummy: Boolean
   }
@@ -21,7 +25,7 @@ const typeDefs = gql`
   }
 `;
 const resolvers: Resolvers = {
-  Date: GraphQLDateTime
+  DateTime: GraphQLDateTime
 };
 
 // creating postgres pubsub event listener
@@ -37,15 +41,16 @@ export default new GraphQLModule({
   name: "common",
   typeDefs,
   resolvers,
-  async context({ res, connection }) {
-    let db;
-    if (!connection) {
-      db = await pool.connect();
-    }
-    return {
-      pubsub,
-      res,
-      db
-    };
-  }
+  providers: () => [
+    {
+      provide: Pool,
+      useValue: pool
+    },
+    {
+      provide: PubSub,
+      scope: ProviderScope.Application,
+      useValue: pubsub
+    },
+    Database
+  ]
 });
