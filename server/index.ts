@@ -1,12 +1,12 @@
+import "reflect-metadata";
 import { ApolloServer } from "apollo-server-express";
 import { app } from "./app";
 import { GraphQLModule } from "@graphql-modules/core";
 import usersModule from "./modules/users";
 import chatsModule from "./modules/chats";
-import { origin, port, secret } from "./env";
+import { origin, port } from "./env";
 import http from "http";
 import { MyContext } from "./context";
-import { UnsplashApi } from "./schema/unsplash.api";
 
 export const rootModule = new GraphQLModule({
   name: "root",
@@ -21,12 +21,9 @@ const server = new ApolloServer({
   formatResponse: (res: any, { context }: { context: MyContext }) => {
     context.db.release();
     return res;
-  },
-  // insterting data source into the context as dataSources so its accessible for resolvers
-  dataSources: () => ({
-    unsplashApi: new UnsplashApi()
-  })
+  }
 });
+
 // enabling server to receive and set cookies and use of credentials sent in http get header
 server.applyMiddleware({
   app,
