@@ -13,6 +13,7 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
+  DateTime: any;
   Date: Date;
 };
 
@@ -30,7 +31,7 @@ export type Message = {
   __typename?: "Message";
   id: Scalars["ID"];
   content: Scalars["String"];
-  createdAt: Scalars["Date"];
+  createdAt: Scalars["DateTime"];
   sender?: Maybe<User>;
   recipient?: Maybe<User>;
   isMine: Scalars["Boolean"];
@@ -178,7 +179,7 @@ export type ResolversTypes = ResolversObject<{
   ID: ResolverTypeWrapper<Scalars["ID"]>;
   String: ResolverTypeWrapper<Scalars["String"]>;
   Message: ResolverTypeWrapper<Message>;
-  Date: ResolverTypeWrapper<Scalars["Date"]>;
+  DateTime: ResolverTypeWrapper<Scalars["DateTime"]>;
   User: ResolverTypeWrapper<User>;
   Boolean: ResolverTypeWrapper<Scalars["Boolean"]>;
   Mutation: ResolverTypeWrapper<{}>;
@@ -192,7 +193,7 @@ export type ResolversParentTypes = ResolversObject<{
   ID: Scalars["ID"];
   String: Scalars["String"];
   Message: Message;
-  Date: Scalars["Date"];
+  DateTime: Scalars["DateTime"];
   User: User;
   Boolean: Scalars["Boolean"];
   Mutation: {};
@@ -223,9 +224,9 @@ export type ChatResolvers<
   >;
 }>;
 
-export interface DateScalarConfig
-  extends GraphQLScalarTypeConfig<ResolversTypes["Date"], any> {
-  name: "Date";
+export interface DateTimeScalarConfig
+  extends GraphQLScalarTypeConfig<ResolversTypes["DateTime"], any> {
+  name: "DateTime";
 }
 
 export type MessageResolvers<
@@ -234,7 +235,7 @@ export type MessageResolvers<
 > = ResolversObject<{
   id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>;
   content?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
-  createdAt?: Resolver<ResolversTypes["Date"], ParentType, ContextType>;
+  createdAt?: Resolver<ResolversTypes["DateTime"], ParentType, ContextType>;
   sender?: Resolver<Maybe<ResolversTypes["User"]>, ParentType, ContextType>;
   recipient?: Resolver<Maybe<ResolversTypes["User"]>, ParentType, ContextType>;
   isMine?: Resolver<ResolversTypes["Boolean"], ParentType, ContextType>;
@@ -331,7 +332,7 @@ export type UserResolvers<
 
 export type Resolvers<ContextType = MyContext> = ResolversObject<{
   Chat?: ChatResolvers<ContextType>;
-  Date?: GraphQLScalarType;
+  DateTime?: GraphQLScalarType;
   Message?: MessageResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;

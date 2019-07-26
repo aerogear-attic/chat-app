@@ -1,7 +1,8 @@
 import { RESTDataSource, RequestOptions } from "apollo-datasource-rest";
 import { resolve } from "path";
 import { trackProvider } from "@safe-api/middleware";
-import { RandomPhoto } from "../types/unsplash";
+import { RandomPhoto } from "../../types/unsplash";
+import { Injectable, ProviderScope } from "@graphql-modules/di";
 
 // using rest data resource to be able to use http methods from node amd safe api tracker
 // to ensure that data received from unsplashed is correct
@@ -10,6 +11,10 @@ interface RandomPhotoInput {
   query: string;
   orientation: "landscape" | "portrait" | "squarish";
 }
+
+@Injectable({
+  scope: ProviderScope.Application
+})
 export class UnsplashApi extends RESTDataSource {
   constructor() {
     super();
