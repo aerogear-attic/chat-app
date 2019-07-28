@@ -1,3 +1,4 @@
+import { defaultDataIdFromObject } from 'apollo-cache-inmemory';
 import gql from 'graphql-tag';
 import React, { useCallback } from 'react';
 import { useQuery, useMutation } from 'react-apollo-hooks';
@@ -87,15 +88,39 @@ const ChatRoomScreen: React.FC<ChatRoomScreenParams> = ({ history, chatId }) => 
         },
         // tslint:disable-next-line:no-shadowed-variable
         update: (client: any, { data: { addMessage } }: any) => {
-          client.writeQuery({
-            query: getChatQuery,
-            variables: { chatId },
-            data: {
-              chat: {
-                ...chat,
-                messages: chat.messages.concat(addMessage)
-              }
-            }
+          interface FullChat { [key: string]: any; }
+          let fullChat;
+          const chatIdFromStore = defaultDataIdFromObject(chat);
+
+          if (chatIdFromStore === null) {
+            return;
+          }
+
+          try {
+            fullChat = client.readFragment({
+              id: chatIdFromStore,
+              fragment: fragments.fullChat,
+              fragmentName: 'FullChat'
+            });
+          } catch (e) {
+            return;
+          }
+
+          if (fullChat === null) {
+            return;
+          }
+          if (fullChat.messages.some((m: any) => m.id === addMessage.id)) {
+            return;
+          }
+
+          fullChat.messages.push(addMessage);
+          fullChat.lastMessage = addMessage;
+
+          client.writeFragment({
+            id: chatIdFromStore,
+            fragment: fragments.fullChat,
+            fragmentName: 'FullChat',
+            data: fullChat
           });
 
           let data;
@@ -107,25 +132,33 @@ const ChatRoomScreen: React.FC<ChatRoomScreenParams> = ({ history, chatId }) => 
           } catch (e) {
             return;
           }
+
           if (!data || data === null) {
             return null;
           }
+
           if (!data.chats || data.chats === undefined) {
             return null;
           }
+
           const chats = data.chats;
           const chatIndex = chats.findIndex((c: any) => c.id === chatId);
-          if (chatIndex === -1) { return; }
+
+          if (chatIndex === -1) {
+            return;
+          }
+
           const chatWhereAdded = chats[chatIndex];
+
           chatWhereAdded.lastMessage = addMessage;
           // The chat will appear at the top of the ChatsList component
           chats.splice(chatIndex, 1);
           chats.unshift(chatWhereAdded);
+
           client.writeQuery({
             query: queries.chats,
             data: { chats }
           });
-
         }
       });
     },
