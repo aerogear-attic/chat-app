@@ -6,6 +6,8 @@ import ChatNavbar from './ChatNavbar';
 import MessageInput from './MessageInput';
 import MessagesList from './MessagesList';
 import { History } from 'history';
+import * as queries from '../../graphql/queries';
+
 const Container = styled.div`
   background: url(/assets/chat-background.jpg);
   display: flex;
@@ -58,6 +60,10 @@ export interface ChatQueryResult {
 
 type OptionalChatQueryResult = ChatQueryResult | null;
 
+interface ChatsResult {
+  chats: any[];
+}
+
 const ChatRoomScreen: React.FC<ChatRoomScreenParams> = ({ history, chatId }) => {
 
   const {
@@ -97,6 +103,35 @@ const ChatRoomScreen: React.FC<ChatRoomScreenParams> = ({ history, chatId }) => 
               }
             }
           });
+
+          let data;
+
+          try {
+            data = client.readQuery({
+              query: queries.chats
+            });
+          } catch (e) {
+            return;
+          }
+          if (!data || data === null) {
+            return null;
+          }
+          if (!data.chats || data.chats === undefined) {
+            return null;
+          }
+          const chats = data.chats;
+          const chatIndex = chats.findIndex((c: any) => c.id === chatId);
+          if (chatIndex === -1) { return; }
+          const chatWhereAdded = chats[chatIndex];
+          chatWhereAdded.lastMessage = addMessage;
+          // The chat will appear at the top of the ChatsList component
+          chats.splice(chatIndex, 1);
+          chats.unshift(chatWhereAdded);
+          client.writeQuery({
+            query: queries.chats,
+            data: { chats }
+          });
+
         }
       });
     },
