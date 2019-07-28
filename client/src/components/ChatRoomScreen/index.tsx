@@ -1,6 +1,6 @@
 import gql from 'graphql-tag';
 import React, { useCallback } from 'react';
-import { useApolloClient, useQuery } from 'react-apollo-hooks';
+import { useQuery, useMutation } from 'react-apollo-hooks';
 import styled from 'styled-components';
 import ChatNavbar from './ChatNavbar';
 import MessageInput from './MessageInput';
@@ -11,6 +11,16 @@ const Container = styled.div`
   display: flex;
   flex-flow: column;
   height: 100vh;
+`;
+
+const addMessageMutation = gql`
+  mutation AddMessage($chatId: ID!, $content: String!) {
+    addMessage(chatId: $chatId, content: $content) {
+      id
+      content
+      createdAt
+    }
+  }
 `;
 
 const getChatQuery = gql`
@@ -50,41 +60,54 @@ type OptionalChatQueryResult = ChatQueryResult | null;
 
 const ChatRoomScreen: React.FC<ChatRoomScreenParams> = ({ history, chatId }) => {
 
-  const client = useApolloClient();
   const {
-    data: { chat }
+    data, loading, error
   } = useQuery<any>(getChatQuery, {
     variables: { chatId }
   });
 
+  const chat = data && data.chat ? data.chat : null;
+
+  const [addMessage]: any = useMutation(addMessageMutation);
+
   const onSendMessage = useCallback(
     (content: string) => {
-      if (!chat) {
-        return null;
-      }
-
-      const message = {
-        id: (chat.messages.length + 10).toString(),
-        createdAt: Date.now(),
-        content,
-        __typename: 'Chat'
-      };
-
-      client.writeQuery({
-        query: getChatQuery,
-        variables: { chatId },
-        data: {
-          chat: {
-            ...chat,
-            messages: chat.messages.concat(message)
+      addMessage({
+        variables: { chatId, content },
+        optimisticResponse: {
+          __typename: 'Mutation',
+          addMessage: {
+            __typename: 'Message',
+            id: Math.random()
+              .toString(36)
+              .substr(2, 9),
+            createdAt: new Date(),
+            content
           }
+        },
+        // tslint:disable-next-line:no-shadowed-variable
+        update: (client: any, { data: { addMessage } }: any) => {
+          client.writeQuery({
+            query: getChatQuery,
+            variables: { chatId },
+            data: {
+              chat: {
+                ...chat,
+                messages: chat.messages.concat(addMessage)
+              }
+            }
+          });
         }
       });
-    }, [chat, chatId, client]
+    },
+    [chat, chatId, addMessage]
   );
 
-  if (!chat) {
-    return null;
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+  if (error) {
+    return <div>Error! {error.message}</div>;
   }
 
   return (
@@ -94,6 +117,7 @@ const ChatRoomScreen: React.FC<ChatRoomScreenParams> = ({ history, chatId }) => 
       <MessageInput onSendMessage={onSendMessage} />
     </Container>
   );
+
 };
 
 export default ChatRoomScreen;
