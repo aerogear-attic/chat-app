@@ -16,28 +16,38 @@ const typeDefs = gql`
     id: ID!
     content: String!
     createdAt: DateTime!
+    chat: Chat
     sender: User
     recipient: User
     isMine: Boolean!
-    chat: Chat
   }
+
+  type MessagesResult {
+    cursor: Float
+    hasMore: Boolean!
+    messages: [Message!]!
+  }
+
   type Chat {
     id: ID!
     name: String
     picture: String
     lastMessage: Message
-    messages: [Message!]!
+    messages(limit: Int!, after: Float): MessagesResult!
     participants: [User!]!
   }
+
   extend type Query {
     chats: [Chat!]!
     chat(chatId: ID!): Chat
   }
+
   extend type Mutation {
     addMessage(chatId: ID!, content: String!): Message
     addChat(recipientId: ID!): Chat
     removeChat(chatId: ID!): ID
   }
+
   extend type Subscription {
     messageAdded: Message!
     chatAdded: Chat!
@@ -81,7 +91,9 @@ const resolvers: Resolvers = {
     // pulling details of participant of chat that is not the current user but belongs to current user chat room
     async name(chat, args, { injector }) {
       const currentUser = await injector.get(Auth).currentUser();
+
       if (!currentUser) return null;
+
       const participant = await injector.get(Chats).firstRecipient({
         chatId: chat.id,
         userId: currentUser.id
@@ -91,7 +103,9 @@ const resolvers: Resolvers = {
     },
 
     // pulling details of participant of chat that is not the current user but belongs to current user chat room
-    async picture(chat, args, { currentUser, db, injector }) {
+    async picture(chat, args, { injector }) {
+      const currentUser = await injector.get(Auth).currentUser();
+
       if (!currentUser) return null;
 
       const participant = await injector.get(Chats).firstRecipient({
@@ -106,7 +120,11 @@ const resolvers: Resolvers = {
 
     // pulling all messages for X chat room
     async messages(chat, args, { injector }) {
-      return injector.get(Chats).findMessagesByChat(chat.id);
+      return injector.get(Chats).findMessagesByChat({
+        chatId: chat.id,
+        limit: args.limit,
+        after: args.after
+      });
     },
 
     // pulling last message of X chat room
@@ -124,6 +142,7 @@ const resolvers: Resolvers = {
     // pulls all chat ID's which current user is part of
     async chats(root, args, { injector }) {
       const currentUser = await injector.get(Auth).currentUser();
+
       if (!currentUser) return [];
 
       return injector.get(Chats).findChatsByUser(currentUser.id);
@@ -132,6 +151,7 @@ const resolvers: Resolvers = {
     // pulls X chat room that current user is part of
     async chat(root, { chatId }, { injector }) {
       const currentUser = await injector.get(Auth).currentUser();
+
       if (!currentUser) return null;
 
       return injector
@@ -144,7 +164,9 @@ const resolvers: Resolvers = {
     // adds message to the db, publishes messageAdded subscription
     async addMessage(root, { chatId, content }, { injector }) {
       const currentUser = await injector.get(Auth).currentUser();
+
       if (!currentUser) return null;
+
       return injector
         .get(Chats)
         .addMessage({ chatId, content, userId: currentUser.id });
@@ -153,6 +175,7 @@ const resolvers: Resolvers = {
     // creates a chat room between current user and a recipient, publish chat added subscription
     async addChat(root, { recipientId }, { injector }) {
       const currentUser = await injector.get(Auth).currentUser();
+
       if (!currentUser) return null;
 
       return injector
@@ -163,6 +186,7 @@ const resolvers: Resolvers = {
     // removes chat of X chat Id that belongs to current user, publish chat removed pubsub
     async removeChat(root, { chatId }, { injector }) {
       const currentUser = await injector.get(Auth).currentUser();
+
       if (!currentUser) return null;
 
       return injector.get(Chats).removeChat({ chatId, userId: currentUser.id });

@@ -6,6 +6,7 @@ import {
 import { User, Message, Chat } from "../db";
 import { MyContext } from "../context";
 export type Maybe<T> = T | null;
+export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: string;
@@ -23,8 +24,13 @@ export type Chat = {
   name?: Maybe<Scalars["String"]>;
   picture?: Maybe<Scalars["String"]>;
   lastMessage?: Maybe<Message>;
-  messages: Array<Message>;
+  messages: MessagesResult;
   participants: Array<User>;
+};
+
+export type ChatMessagesArgs = {
+  limit: Scalars["Int"];
+  after?: Maybe<Scalars["Float"]>;
 };
 
 export type Message = {
@@ -32,10 +38,17 @@ export type Message = {
   id: Scalars["ID"];
   content: Scalars["String"];
   createdAt: Scalars["DateTime"];
+  chat?: Maybe<Chat>;
   sender?: Maybe<User>;
   recipient?: Maybe<User>;
   isMine: Scalars["Boolean"];
-  chat?: Maybe<Chat>;
+};
+
+export type MessagesResult = {
+  __typename?: "MessagesResult";
+  cursor?: Maybe<Scalars["Float"]>;
+  hasMore: Scalars["Boolean"];
+  messages: Array<Message>;
 };
 
 export type Mutation = {
@@ -182,6 +195,13 @@ export type ResolversTypes = ResolversObject<{
   DateTime: ResolverTypeWrapper<Scalars["DateTime"]>;
   User: ResolverTypeWrapper<User>;
   Boolean: ResolverTypeWrapper<Scalars["Boolean"]>;
+  Int: ResolverTypeWrapper<Scalars["Int"]>;
+  Float: ResolverTypeWrapper<Scalars["Float"]>;
+  MessagesResult: ResolverTypeWrapper<
+    Omit<MessagesResult, "messages"> & {
+      messages: Array<ResolversTypes["Message"]>;
+    }
+  >;
   Mutation: ResolverTypeWrapper<{}>;
   Subscription: ResolverTypeWrapper<{}>;
 }>;
@@ -196,6 +216,11 @@ export type ResolversParentTypes = ResolversObject<{
   DateTime: Scalars["DateTime"];
   User: User;
   Boolean: Scalars["Boolean"];
+  Int: Scalars["Int"];
+  Float: Scalars["Float"];
+  MessagesResult: Omit<MessagesResult, "messages"> & {
+    messages: Array<ResolversTypes["Message"]>;
+  };
   Mutation: {};
   Subscription: {};
 }>;
@@ -213,9 +238,10 @@ export type ChatResolvers<
     ContextType
   >;
   messages?: Resolver<
-    Array<ResolversTypes["Message"]>,
+    ResolversTypes["MessagesResult"],
     ParentType,
-    ContextType
+    ContextType,
+    ChatMessagesArgs
   >;
   participants?: Resolver<
     Array<ResolversTypes["User"]>,
@@ -236,10 +262,23 @@ export type MessageResolvers<
   id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>;
   content?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
   createdAt?: Resolver<ResolversTypes["DateTime"], ParentType, ContextType>;
+  chat?: Resolver<Maybe<ResolversTypes["Chat"]>, ParentType, ContextType>;
   sender?: Resolver<Maybe<ResolversTypes["User"]>, ParentType, ContextType>;
   recipient?: Resolver<Maybe<ResolversTypes["User"]>, ParentType, ContextType>;
   isMine?: Resolver<ResolversTypes["Boolean"], ParentType, ContextType>;
-  chat?: Resolver<Maybe<ResolversTypes["Chat"]>, ParentType, ContextType>;
+}>;
+
+export type MessagesResultResolvers<
+  ContextType = MyContext,
+  ParentType = ResolversParentTypes["MessagesResult"]
+> = ResolversObject<{
+  cursor?: Resolver<Maybe<ResolversTypes["Float"]>, ParentType, ContextType>;
+  hasMore?: Resolver<ResolversTypes["Boolean"], ParentType, ContextType>;
+  messages?: Resolver<
+    Array<ResolversTypes["Message"]>,
+    ParentType,
+    ContextType
+  >;
 }>;
 
 export type MutationResolvers<
@@ -334,6 +373,7 @@ export type Resolvers<ContextType = MyContext> = ResolversObject<{
   Chat?: ChatResolvers<ContextType>;
   DateTime?: GraphQLScalarType;
   Message?: MessageResolvers<ContextType>;
+  MessagesResult?: MessagesResultResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   Subscription?: SubscriptionResolvers<ContextType>;
