@@ -47,6 +47,9 @@ jobs:
           name: install-dependencies
           command: yarn install
       - run:
+          name: run codegen
+          command: yarn codegen
+      - run:
           name: compile server typescript code
           command: yarn build
       - run:
