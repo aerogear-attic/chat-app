@@ -14,6 +14,7 @@ import bcrypt from "bcrypt";
 export class Auth {
   @Inject() private users: Users;
   @Inject() private module: ModuleSessionInfo;
+  private _currentUser: User;
   private get req() {
     return this.module.session.req || this.module.session.request;
   }
@@ -64,10 +65,14 @@ export class Auth {
   }
 
   async currentUser(): Promise<User | null> {
+    if (this._currentUser) {
+      return this._currentUser;
+    }
     if (this.req.cookies.authToken) {
       const username = jwt.verify(this.req.cookies.authToken, secret) as string;
       if (username) {
-        return this.users.findByUsername(username);
+        this._currentUser = await this.users.findByUsername(username);
+        return this._currentUser;
       }
     }
     return null;
