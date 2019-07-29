@@ -4,8 +4,8 @@ import ReactDOM from 'react-dom';
 import { cleanup, render, fireEvent, wait, waitForDomChange } from '@testing-library/react';
 import { createBrowserHistory } from 'history';
 import { mockApolloClient } from '../../test-helpers';
-import ChatList, { getChatsQuery } from './ChatList';
-import { useChatsQuery } from '../../graphql/types';
+import ChatList from './ChatList';
+import * as queries from '../../graphql/queries';
 
 describe('ChatList', () => {
   afterEach(() => {
@@ -16,7 +16,7 @@ describe('ChatList', () => {
   it('renders fetched chats data', async () => {
     const client = mockApolloClient([
       {
-        request: { query: getChatsQuery },
+        request: { query: queries.chats },
         result: {
           data: {
             chats: [
@@ -62,7 +62,7 @@ describe('ChatList', () => {
   it('should navigate to the target chat room on chat item click', async () => {
     const client = mockApolloClient([
       {
-        request: { query: getChatsQuery },
+        request: { query: queries.chats },
         result: {
           data: {
             chats: [
