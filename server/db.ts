@@ -21,7 +21,7 @@ export type Message = {
 export type Chat = {
   id: string;
 };
-
+// creating initial db config
 export const dbConfig = {
   host: "localhost",
   port: process.env.DB_PORT ? parseInt(process.env.DB_PORT) : 5432,
