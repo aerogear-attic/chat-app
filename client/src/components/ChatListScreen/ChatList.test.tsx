@@ -5,6 +5,7 @@ import { cleanup, render, fireEvent, wait, waitForDomChange } from '@testing-lib
 import { createBrowserHistory } from 'history';
 import { mockApolloClient } from '../../test-helpers';
 import ChatList, { getChatsQuery } from './ChatList';
+import { useChatsQuery } from '../../graphql/types';
 
 describe('ChatList', () => {
   afterEach(() => {
