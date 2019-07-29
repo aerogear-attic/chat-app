@@ -2,7 +2,6 @@ import moment from 'moment';
 import React, { useEffect, useRef } from 'react';
 import ReactDOM from 'react-dom';
 import styled from 'styled-components';
-import { ChatQueryMessage } from './index';
 
 const Container = styled.div`
   display: block;
@@ -54,8 +53,15 @@ const Timestamp = styled.div`
   color: gray;
   font-size: 12px;
 `;
+
+interface Message {
+  id: string | null;
+  content: string | null;
+  createdAt: string | null;
+}
+
 interface MessagesListProps {
-  messages: ChatQueryMessage[];
+  messages: Message[];
 }
 
 const MessagesList: React.FC<MessagesListProps> = ({ messages }) => {
