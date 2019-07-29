@@ -10,6 +10,7 @@ import { Chats } from "./chats.provider";
 import { PubSub } from "../common/pubsub.provider";
 import { Auth } from "./../users/auth.provider";
 
+// creating schema for chats
 const typeDefs = gql`
   type Message {
     id: ID!
@@ -44,6 +45,7 @@ const typeDefs = gql`
   }
 `;
 
+// using chat provider module
 const resolvers: Resolvers = {
   Message: {
     createdAt(message) {

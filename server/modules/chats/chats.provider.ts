@@ -3,9 +3,12 @@ import sql from "sql-template-strings";
 import { Database } from "../common/database.provider";
 import { PubSub } from "../common/pubsub.provider";
 
+// using session scope as I want my providers to be constructed at the beginning of the request
 @Injectable({
   scope: ProviderScope.Session
 })
+
+// injecting pubsub and db providers into chats and also exporting chats provider module
 export class Chats {
   @Inject() private db: Database;
   @Inject() private pubsub: PubSub;
