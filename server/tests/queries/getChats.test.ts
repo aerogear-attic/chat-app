@@ -19,7 +19,7 @@ describe("Query.chats", () => {
             id
             name
             picture
-            messages {
+            lastMessage {
               id
               content
               createdAt

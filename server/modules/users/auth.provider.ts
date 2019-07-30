@@ -68,13 +68,16 @@ export class Auth {
     if (this._currentUser) {
       return this._currentUser;
     }
+
     if (this.req.cookies.authToken) {
       const username = jwt.verify(this.req.cookies.authToken, secret) as string;
+
       if (username) {
         this._currentUser = await this.users.findByUsername(username);
         return this._currentUser;
       }
     }
+
     return null;
   }
 }
