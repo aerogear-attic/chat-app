@@ -29,7 +29,11 @@ describe('ChatList', () => {
                   __typename: 'Message',
                   id: 1,
                   content: 'Hello',
-                  createdAt: new Date('1 Jan 2019 GMT')
+                  createdAt: new Date('1 Jan 2019 GMT'),
+                  chat: {
+                    __typename: 'Chat',
+                    id: 1
+                  }
                 }
               }
             ]
@@ -75,7 +79,11 @@ describe('ChatList', () => {
                   __typename: 'Message',
                   id: 1,
                   content: 'Hello',
-                  createdAt: new Date('1 Jan 2019 GMT')
+                  createdAt: new Date('1 Jan 2019 GMT'),
+                  chat: {
+                    __typename: 'Chat',
+                    id: 1
+                  }
                 }
               }
             ]
