@@ -3,8 +3,11 @@ import { BrowserRouter, Route, Redirect, RouteComponentProps } from 'react-route
 import ChatListScreen from './components/ChatListScreen';
 import ChatRoomScreen from './components/ChatRoomScreen';
 import MyAnimatedSwitch from './components/AnimatedSwitch';
+import { useCacheService } from './services/cache.service';
 
 const App: React.FC = () => {
+  useCacheService();
+
   return (
     <BrowserRouter>
       <MyAnimatedSwitch>

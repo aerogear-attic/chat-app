@@ -3,9 +3,15 @@ import { ApolloProvider } from 'react-apollo-hooks';
 import ReactDOM from 'react-dom';
 import App from './App';
 import { mockApolloClient } from './test-helpers';
+import * as subsriptions from './graphql/subscriptions';
 
 it('renders without crashing', () => {
-  const client = mockApolloClient();
+  const client = mockApolloClient([
+    {
+      request: { query: subsriptions.messageAdded },
+      result: { data: {} }
+    }
+  ]);
   const div = document.createElement('div');
   ReactDOM.render(
     <ApolloProvider client={client}>
