@@ -70,6 +70,7 @@ const ChatRoomScreen: React.FC<ChatRoomScreenParams> = ({ history, chatId }) => 
               .toString(36)
               .substr(2, 9),
             createdAt: new Date(),
+            isMine: true,
             chat: {
               __typename: 'Chat',
               id: chatId
