@@ -10,8 +10,8 @@ import * as serviceWorker from './serviceWorker';
 const theme = createMuiTheme({
   palette: {
     primary: { main: '#2c6157' },
-    secondary: { main: '#6fd056' }
-  }
+    secondary: { main: '#6fd056' },
+  },
 });
 
 ReactDOM.render(

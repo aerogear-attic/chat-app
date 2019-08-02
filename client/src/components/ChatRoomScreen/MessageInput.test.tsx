@@ -11,9 +11,10 @@ import MessageInput from './MessageInput';
 
 describe('MessageInput;', () => {
   afterEach(cleanup);
-  it('triggers callback on send button click', async () => {
 
-    const onSendMessage = jest.fn(() => { });
+  it('triggers callback on send button click', async () => {
+    const onSendMessage = jest.fn(() => {});
+
     {
       const { container, getByTestId } = render(
         <MessageInput onSendMessage={onSendMessage} />
@@ -47,7 +48,7 @@ describe('MessageInput;', () => {
       fireEvent.keyPress(messageInput, {
         key: 'Enter',
         code: 13,
-        charCode: 13
+        charCode: 13,
       });
 
       await wait(() => expect(onSendMessage.mock.calls.length).toBe(1));
