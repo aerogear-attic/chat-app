@@ -1,7 +1,8 @@
 import Button from '@material-ui/core/Button';
 import SendIcon from '@material-ui/icons/Send';
-import React, { useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
+import { useState } from 'react';
 
 const Container = styled.div`
   display: flex;
@@ -9,6 +10,7 @@ const Container = styled.div`
   padding: 5px;
   width: calc(100% - 10px);
 `;
+
 const ActualInput = styled.input`
   width: calc(100% - 50px);
   border: none;
@@ -22,6 +24,7 @@ const ActualInput = styled.input`
   font-size: 18px;
   line-height: 45px;
 `;
+
 const SendButton = styled(Button)`
   min-width: 50px !important;
   width: 50px !important;
@@ -31,6 +34,7 @@ const SendButton = styled(Button)`
   margin-right: 0 !important;
   color: white !important;
   padding-left: 20px !important;
+
   svg {
     margin-left: -3px;
   }
@@ -54,9 +58,7 @@ const MessageInput: React.FC<MessageInputProps> = ({ onSendMessage }) => {
   };
 
   const submitMessage = () => {
-    if (!message) {
-      return;
-    }
+    if (!message) return;
 
     setMessage('');
 
@@ -68,20 +70,22 @@ const MessageInput: React.FC<MessageInputProps> = ({ onSendMessage }) => {
   return (
     <Container>
       <ActualInput
-        data-testid='message-input'
-        type='text'
-        placeholder='Type a message'
+        data-testid="message-input"
+        type="text"
+        placeholder="Type a message"
         value={message}
         onKeyPress={onKeyPress}
-        onChange={onChange} />
+        onChange={onChange}
+      />
       <SendButton
-        data-testid='send-button'
-        variant='contained'
-        color='primary'
+        data-testid="send-button"
+        variant="contained"
+        color="primary"
         onClick={submitMessage}>
         <SendIcon />
       </SendButton>
     </Container>
   );
 };
+
 export default MessageInput;

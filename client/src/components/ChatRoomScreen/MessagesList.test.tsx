@@ -25,11 +25,10 @@ describe('MessagesList', () => {
         id: '2',
         content: 'bar',
         createdAt: time,
-      }
+      },
     ];
 
-    let message1;
-    let message2;
+    let message1, message2;
     {
       const { container, getAllByTestId, getByTestId } = render(
         <MessagesList messages={messages} />
@@ -40,9 +39,9 @@ describe('MessagesList', () => {
     }
 
     expect(getByTestId(message1, 'message-content')).toHaveTextContent('foo');
-    expect(getByTestId(message1, 'message-date')).toHaveTextContent('00:00');
+    expect(getByTestId(message1, 'message-date')).toHaveTextContent('02:00');
 
     expect(getByTestId(message2, 'message-content')).toHaveTextContent('bar');
-    expect(getByTestId(message2, 'message-date')).toHaveTextContent('00:00');
+    expect(getByTestId(message2, 'message-date')).toHaveTextContent('02:00');
   });
 });

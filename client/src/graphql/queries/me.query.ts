@@ -2,10 +2,10 @@ import gql from 'graphql-tag';
 import * as fragments from '../fragments';
 
 export default gql`
-  query Chats {
-    chats {
-      ...Chat
+  query Me {
+    me {
+      ...User
     }
   }
-  ${fragments.chat}
+  ${fragments.user}
 `;

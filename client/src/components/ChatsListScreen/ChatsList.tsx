@@ -1,28 +1,34 @@
-import React, { useCallback } from 'react';
-import { History } from 'history';
-import moment from 'moment';
+import React from 'react';
+import format from 'date-fns/format';
 import { List, ListItem } from '@material-ui/core';
 import styled from 'styled-components';
+import { useCallback } from 'react';
+import { History } from 'history';
 import { useChatsQuery } from '../../graphql/types';
+import { useGetChatPrefetch } from '../ChatRoomScreen';
 
 const Container = styled.div`
   height: calc(100% - 56px);
   overflow-y: overlay;
 `;
+
 const StyledList = styled(List)`
   padding: 0 !important;
-` as typeof List;
+`;
+
 const StyledListItem = styled(ListItem)`
   height: 76px;
   padding: 0 15px;
   display: flex;
-` as typeof ListItem;
+`;
+
 const ChatPicture = styled.img`
   height: 50px;
   width: 50px;
   object-fit: cover;
   border-radius: 50%;
 `;
+
 const ChatInfo = styled.div`
   width: calc(100% - 60px);
   height: 46px;
@@ -31,9 +37,11 @@ const ChatInfo = styled.div`
   border-bottom: 0.5px solid silver;
   position: relative;
 `;
+
 const ChatName = styled.div`
   margin-top: 5px;
 `;
+
 const MessageContent = styled.div`
   color: gray;
   font-size: 15px;
@@ -42,6 +50,7 @@ const MessageContent = styled.div`
   overflow: hidden;
   white-space: nowrap;
 `;
+
 const MessageDate = styled.div`
   position: absolute;
   color: gray;
@@ -50,42 +59,52 @@ const MessageDate = styled.div`
   font-size: 13px;
 `;
 
-interface ChatListProps {
+interface ChatsListProps {
   history: History;
 }
 
-const ChatList: React.FC<ChatListProps> = ({ history }) => {
-  const navToChat = useCallback(chat => {
-    history.push(`chats/${chat.id}`);
-  }, [history]);
+const ChatsList: React.FC<ChatsListProps> = ({ history }) => {
+  const navToChat = useCallback(
+    chat => {
+      history.push(`chats/${chat.id}`);
+    },
+    [history]
+  );
+  const prefetchChat = useGetChatPrefetch();
 
   const { data } = useChatsQuery();
 
   if (data === undefined || data.chats === undefined) {
     return null;
   }
-  const chats = data.chats;
+  let chats = data.chats;
 
   return (
     <Container>
       <StyledList>
         {chats.map((chat: any) => (
           <StyledListItem
-            data-testid='chat'
             key={chat.id}
+            data-testid="chat"
             button
-            onClick={navToChat.bind(null, chat)}>
+            onClick={navToChat.bind(null, chat)}
+            onMouseEnter={() => {
+              prefetchChat(chat.id);
+            }}>
             <ChatPicture
-              data-testid='picture'
+              data-testid="picture"
               src={chat.picture}
-              alt='Profile' />
+              alt="Profile"
+            />
             <ChatInfo>
-              <ChatName data-testid='name'>{chat.name}</ChatName>
+              <ChatName data-testid="name">{chat.name}</ChatName>
               {chat.lastMessage && (
                 <React.Fragment>
-                  <MessageContent data-testid='content'>{chat.lastMessage.content}</MessageContent>
-                  <MessageDate data-testid='date'>
-                    {moment(chat.lastMessage.createdAt).format('HH:mm')}
+                  <MessageContent data-testid="content">
+                    {chat.lastMessage.content}
+                  </MessageContent>
+                  <MessageDate data-testid="date">
+                    {format(chat.lastMessage.createdAt, 'HH:mm')}
                   </MessageDate>
                 </React.Fragment>
               )}
@@ -97,4 +116,4 @@ const ChatList: React.FC<ChatListProps> = ({ history }) => {
   );
 };
 
-export default ChatList;
+export default ChatsList;
