@@ -9,4 +9,8 @@ services:
       POSTGRES_USER: testuser
       POSTGRES_PASSWORD: testpassword
       POSTGRES_DB: whatsapp
-  
+  mosca:
+    image: matteocollina/mosca
+    ports:
+      - "1883:1883" # MQTT
+      - "80:80" # web interface
