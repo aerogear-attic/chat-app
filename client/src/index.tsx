@@ -2,10 +2,12 @@ import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { ApolloProvider } from 'react-apollo-hooks';
+import { createOfflineClient } from './client'
+import { OffixProvider } from './lib/offix-react-hooks/OffixProvider'
 import './index.css';
 import App from './App';
-import client from './client';
 import * as serviceWorker from './serviceWorker';
+
 
 const theme = createMuiTheme({
   palette: {
@@ -14,11 +16,13 @@ const theme = createMuiTheme({
   },
 });
 
+const client = createOfflineClient()
+
 ReactDOM.render(
   <MuiThemeProvider theme={theme}>
-    <ApolloProvider client={client}>
+    <OffixProvider client={client}>
       <App />
-    </ApolloProvider>
+    </OffixProvider>
   </MuiThemeProvider>,
   document.getElementById('root')
 );
