@@ -17,6 +17,7 @@ import {
 } from '../../graphql/types';
 import * as fragments from '../../graphql/fragments';
 import { writeMessage } from '../../services/cache.service';
+import { useOfflineMutation } from '../../lib/offix-react-hooks/useOfflineMutation';
 
 const Container = styled.div`
   background: url(/assets/chat-background.jpg);
@@ -114,7 +115,7 @@ const ChatRoom: React.FC<ChatRoomScreenParams> = ({ history, chatId }) => {
     variables: { chatId, after, limit },
   });
 
-const [addMessage] = useAddMessageMutation();
+const [addMessage] = useOfflineMutation(addMessageMutation);
 
   const onSendMessage = useCallback(
     (content: string) => {
