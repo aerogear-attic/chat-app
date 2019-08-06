@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   BrowserRouter,
   Route,
@@ -11,27 +11,59 @@ import ChatsListScreen from './components/ChatsListScreen';
 import ChatCreationScreen from './components/ChatCreationScreen';
 import AnimatedSwitch from './components/AnimatedSwitch';
 import { withAuth } from './services/auth.service';
+import { ApolloOfflineClient, OfflineClient } from 'offix-client';
+import { ApolloProvider } from 'react-apollo-hooks'
+import { useOffixClient } from './lib/offix-react-hooks/OffixProvider';
 
-const App: React.FC = () => (
+const App: React.FC = () => {
+  const offixClient = useOffixClient()
+
+  // First we initialize a piece of state called apolloClient
+  // It's null at the start
+  const [apolloClient, setApolloClient] = useState(null as unknown as ApolloOfflineClient)
+
+  console.log('app render')
+
+  // Inside useEffect, initialize the offix client and set the apollo client
+  // This only happens once.
+  useEffect(() => {
+    offixClient.init().then((client: React.SetStateAction<ApolloOfflineClient>) => {
+      console.log('offline client initialized')
+      setApolloClient(client)
+    })
+  }, [offixClient])
+
+  // load the app if the apolloClient is there, otherwise load a loading screen
+  if (apolloClient) {
+    return (
+      <ApolloProvider client={apolloClient}>
+        {renderApp()}
+      </ApolloProvider>
+    )
+  }
+  return <div>Loading...</div>
+};
+
+const renderApp = () => (
   <BrowserRouter>
-    <AnimatedSwitch>
-      <Route exact path="/sign-(in|up)" component={AuthScreen} />
-      <Route exact path="/chats" component={withAuth(ChatsListScreen)} />
+  <AnimatedSwitch>
+    <Route exact path="/sign-(in|up)" component={AuthScreen} />
+    <Route exact path="/chats" component={withAuth(ChatsListScreen)} />
 
-      <Route
-        exact
-        path="/chats/:chatId"
-        component={withAuth(
-          ({ match, history }: RouteComponentProps<{ chatId: string }>) => (
-            <ChatRoomScreen chatId={match.params.chatId} history={history} />
-          )
-        )}
-      />
+    <Route
+      exact
+      path="/chats/:chatId"
+      component={withAuth(
+        ({ match, history }: RouteComponentProps<{ chatId: string }>) => (
+          <ChatRoomScreen chatId={match.params.chatId} history={history} />
+        )
+      )}
+    />
 
-      <Route exact path="/new-chat" component={withAuth(ChatCreationScreen)} />
-    </AnimatedSwitch>
-    <Route exact path="/" render={redirectToChats} />
-  </BrowserRouter>
+    <Route exact path="/new-chat" component={withAuth(ChatCreationScreen)} />
+  </AnimatedSwitch>
+  <Route exact path="/" render={redirectToChats} />
+</BrowserRouter>
 );
 
 const redirectToChats = () => <Redirect to="/chats" />;
