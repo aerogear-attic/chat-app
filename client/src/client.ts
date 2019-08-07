@@ -10,6 +10,9 @@ const apolloOptions = {
 export function createOfflineClient() {
   const options = {
     ...apolloOptions,
+    httpLinkOptions: {
+      credentials: 'include'
+    },
     authContextProvider: undefined
   }
 
