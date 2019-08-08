@@ -80,6 +80,9 @@ jobs:
     steps:
       - checkout:
           path: ~/chat-app
+      - setup_remote_docker:
+          version: 17.05.0-ce
+          docker_layer_caching: true
       - run: |
           cd server          
           TAG=$CIRCLE_TAG ./scripts/buildPublishContainer.sh
