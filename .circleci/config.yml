@@ -40,9 +40,6 @@ jobs:
       - run:
           name: run tslint
           command: yarn lint
-      - run:
-          name: build docker image for server
-          command: docker build . -t server
 
   build-client:
     working_directory: ~/chat-app/client # All the steps below are being run in the client directory
