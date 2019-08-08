@@ -12,6 +12,15 @@ workflows:
           filters:
             tags:
               only: /.*/
+      - publish-images:
+          filters:
+            tags:
+              only: /.*/
+            branches:
+              only: master
+          requires:
+            - build-server
+            - build-client
 
 jobs:
   build-server:
@@ -62,3 +71,21 @@ jobs:
           command: yarn test -u
       - store_test_results:
           path: test-results
+
+  publish-images:
+    working_directory: ~/chat-app/client # All the steps below are being run in the client directory
+    docker:
+      # image for building docker containers
+      - image: docker:17.12.1-ce-git
+    steps:
+      - checkout:
+          path: ~/chat-app
+      - run: |
+          cd server          
+          TAG=$CIRCLE_TAG ./scripts/buildContainer.sh
+          TAG=$CIRCLE_TAG ./scripts/publishContainer.sh
+      - run: |
+          cd client          
+          TAG=$CIRCLE_TAG ./scripts/buildContainer.sh
+          TAG=$CIRCLE_TAG ./scripts/publishContainer.sh
+      
