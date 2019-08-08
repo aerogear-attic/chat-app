@@ -73,7 +73,7 @@ jobs:
           path: test-results
 
   publish-images:
-    working_directory: ~/chat-app/client # All the steps below are being run in the client directory
+    working_directory: ~/chat-app/
     docker:
       # image for building docker containers
       - image: docker:17.12.1-ce-git
@@ -82,10 +82,8 @@ jobs:
           path: ~/chat-app
       - run: |
           cd server          
-          TAG=$CIRCLE_TAG ./scripts/buildContainer.sh
-          TAG=$CIRCLE_TAG ./scripts/publishContainer.sh
+          TAG=$CIRCLE_TAG ./scripts/buildPublishContainer.sh
       - run: |
           cd client          
-          TAG=$CIRCLE_TAG ./scripts/buildContainer.sh
-          TAG=$CIRCLE_TAG ./scripts/publishContainer.sh
+          TAG=$CIRCLE_TAG ./scripts/buildPublishContainer.sh
       
