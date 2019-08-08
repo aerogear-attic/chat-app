@@ -83,10 +83,8 @@ jobs:
       - setup_remote_docker:
           version: 17.05.0-ce
           docker_layer_caching: true
-      - run: |
-          cd server          
-          TAG=$CIRCLE_TAG ./scripts/buildPublishContainer.sh
-      - run: |
-          cd client          
-          TAG=$CIRCLE_TAG ./scripts/buildPublishContainer.sh
+      - run: |         
+          TAG=$CIRCLE_TAG FOLDER=server ./scripts/buildPublishContainer.sh
+      - run: |          
+          TAG=$CIRCLE_TAG FOLDER=client ./scripts/buildPublishContainer.sh
       
