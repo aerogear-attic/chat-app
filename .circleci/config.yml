@@ -40,6 +40,9 @@ jobs:
       - run:
           name: run tslint
           command: yarn lint
+       - run:
+          name: Build application Docker image
+          command: docker build . -t react-docker
 
   build-client:
     working_directory: ~/chat-app/client # All the steps below are being run in the client directory
