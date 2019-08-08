@@ -1,18 +1,44 @@
 import { OfflineClient } from 'offix-client';
+import { OffixClientConfig } from 'offix-client/types/config/OffixClientConfig';
+import { HttpLink } from 'apollo-link-http';
+import { WebSocketLink } from 'apollo-link-ws';
+import { split } from 'apollo-link';
+import { getMainDefinition } from 'apollo-utilities';
 
 const httpUri = process.env.REACT_APP_SERVER_URL + '/graphql';
 const wsUri = httpUri.replace(/^https?/, 'ws');
 
-const apolloOptions = {
+const httpLink = new HttpLink({
+  uri: httpUri,
+  credentials: 'include',
+});
+
+const wsLink = new WebSocketLink({
+  uri: wsUri,
+  options: {
+    // Automatic reconnect in case of connection error
+    reconnect: true,
+  },
+});
+
+const terminatingLink = split(
+  ({ query }) => {
+    const { kind, operation }: any = getMainDefinition(query);
+    // If this is a subscription query, use wsLink, otherwise use httpLink
+    return kind === 'OperationDefinition' && operation === 'subscription';
+  },
+  wsLink,
+  httpLink
+);
+
+const apolloOptions: OffixClientConfig = {
   httpUrl: httpUri,
-  wsUrl: wsUri
+  terminatingLink
 }
+
 export function createOfflineClient() {
   const options = {
     ...apolloOptions,
-    httpLinkOptions: {
-      credentials: 'include'
-    },
     authContextProvider: undefined
   }
 

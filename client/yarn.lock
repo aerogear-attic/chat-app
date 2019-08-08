@@ -2206,16 +2206,6 @@ apollo-link@1.2.12, apollo-link@^1.0.0, apollo-link@^1.2.12, apollo-link@^1.2.3:
     tslib "^1.9.3"
     zen-observable-ts "^0.8.19"
 
-apollo-upload-client@11.0.0:
-  version "11.0.0"
-  resolved "https://registry.yarnpkg.com/apollo-upload-client/-/apollo-upload-client-11.0.0.tgz#465a2ed5756e6155f53befaf82d17bdb08c82060"
-  integrity sha512-JChTrBi1VSF8u6OPrkWUApJlyUvzwhw98kqRB3fSi7/CU6z0OUD42Mee9s5h8mfjKEfOanK6GNZhF4t2tIPXSw==
-  dependencies:
-    "@babel/runtime" "^7.5.4"
-    apollo-link "^1.2.12"
-    apollo-link-http-common "^0.2.14"
-    extract-files "^5.0.1"
-
 apollo-utilities@1.3.2, apollo-utilities@^1.0.1, apollo-utilities@^1.0.25, apollo-utilities@^1.3.0, apollo-utilities@^1.3.2:
   version "1.3.2"
   resolved "https://registry.yarnpkg.com/apollo-utilities/-/apollo-utilities-1.3.2.tgz#8cbdcf8b012f664cd6cb5767f6130f5aed9115c9"
@@ -4694,11 +4684,6 @@ extglob@^2.0.4:
     regex-not "^1.0.0"
     snapdragon "^0.8.1"
     to-regex "^3.0.1"
-
-extract-files@^5.0.1:
-  version "5.0.1"
-  resolved "https://registry.yarnpkg.com/extract-files/-/extract-files-5.0.1.tgz#c9492a8410be643e260a376f0151361993d5f659"
-  integrity sha512-qRW6y9eKF0VbCyOoOEtFhzJ3uykAw8GKwQVXyAIqwocyEWW4m+v+evec34RwtUkkxxHh7NKBLJ6AnXM8W4dH5w==
 
 extsprintf@1.3.0:
   version "1.3.0"
@@ -7918,20 +7903,20 @@ obuf@^1.0.0, obuf@^1.1.2:
   resolved "https://registry.yarnpkg.com/obuf/-/obuf-1.1.2.tgz#09bea3343d41859ebd446292d11c9d4db619084e"
   integrity sha512-PX1wu0AmAdPqOL1mWhqmlOd8kOIZQwGZw6rh7uby9fTc5lhaOWFLX3I6R1hrF9k3zUY40e6igsLGkDXK92LJNg==
 
-offix-cache@0.7.1:
-  version "0.7.1"
-  resolved "https://registry.yarnpkg.com/offix-cache/-/offix-cache-0.7.1.tgz#779b1623790db4dbe3f685b2fa93076a50e0fb58"
-  integrity sha512-wqhU3O0+ifghYEUwOw37+7IFFe18xXzLkvVTmY1XtE2t+0LU0GBlKNwKmK4YT71Wf5e8r1rGp1UIalV6lH6Dnw==
+offix-cache@0.8.0:
+  version "0.8.0"
+  resolved "https://registry.yarnpkg.com/offix-cache/-/offix-cache-0.8.0.tgz#57792e557b64d183b3ab85c778fd4f2e09297448"
+  integrity sha512-rXl5/svvLeHLEM5B2fLMCZ68gYTXrpgOmTIaAgKx/9pKLNXZWIc9rg0jEMlTmWMQI3kxU9icham/HbDbzDYPTA==
   dependencies:
     apollo-client "2.6.3"
     apollo-link "1.2.12"
     apollo-utilities "1.3.2"
     util "0.12.1"
 
-offix-client@0.7.1:
-  version "0.7.1"
-  resolved "https://registry.yarnpkg.com/offix-client/-/offix-client-0.7.1.tgz#c8dbc7dd49907a48a54b80d32e56654e9ffc18a0"
-  integrity sha512-yadmz1m5uBKr8boz7Yk4eE1rh6dUW6wBG9tC2gnZjpGDUaziZxMooOxdrR3oxkox+nVq3KRjh7mJBzGxIqwGRA==
+offix-client@0.8.1:
+  version "0.8.1"
+  resolved "https://registry.yarnpkg.com/offix-client/-/offix-client-0.8.1.tgz#e91500cef6c366cb8cbcabd344d2ad5584d54d6d"
+  integrity sha512-ANuT+EoBDfNbe5wLNPljMRnXjej76arHlIvD9W7LOQE75P5gii4vuF4ctJLIfUTzlOM/LKyednl/hZ2m5LNrhQ==
   dependencies:
     apollo-cache-inmemory "1.6.2"
     apollo-cache-persist "0.1.1"
@@ -7940,18 +7925,15 @@ offix-client@0.7.1:
     apollo-link-context "1.0.18"
     apollo-link-http "1.5.15"
     apollo-link-retry "2.2.14"
-    apollo-link-ws "1.0.18"
-    apollo-upload-client "11.0.0"
     debug "4.1.1"
     idb-localstorage "0.2.0"
-    offix-cache "0.7.1"
-    offix-offline "0.7.1"
-    subscriptions-transport-ws "0.9.16"
+    offix-cache "0.8.0"
+    offix-offline "0.8.0"
 
-offix-offline@0.7.1:
-  version "0.7.1"
-  resolved "https://registry.yarnpkg.com/offix-offline/-/offix-offline-0.7.1.tgz#53546bd4e3bdfc5280708f0bdef80587cf02e0b9"
-  integrity sha512-9oPI2je/v5+PzOvbrAw4H+EXOhPRav83giQnFgraJOisnZUVaFUvH77ycAa12T8t1r3VrZYDl2Zv7Ra81nVvEA==
+offix-offline@0.8.0:
+  version "0.8.0"
+  resolved "https://registry.yarnpkg.com/offix-offline/-/offix-offline-0.8.0.tgz#06792a46a6fe8b9c43f644693ebd951ff1474776"
+  integrity sha512-UPME0662Bp9KHq8q++eqObI5G22rshJ1C60UnPoh1KjKFJq7191MU9+OxdDCA6pePewthgQTzWX9ZDHRRfvI2Q==
   dependencies:
     apollo-cache-inmemory "1.6.2"
     apollo-client "2.6.3"
@@ -7959,7 +7941,7 @@ offix-offline@0.7.1:
     apollo-link-error "1.1.11"
     debug "4.1.1"
     idb-localstorage "0.2.0"
-    offix-cache "0.7.1"
+    offix-cache "0.8.0"
 
 on-finished@~2.3.0:
   version "2.3.0"
