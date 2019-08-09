@@ -7903,20 +7903,20 @@ obuf@^1.0.0, obuf@^1.1.2:
   resolved "https://registry.yarnpkg.com/obuf/-/obuf-1.1.2.tgz#09bea3343d41859ebd446292d11c9d4db619084e"
   integrity sha512-PX1wu0AmAdPqOL1mWhqmlOd8kOIZQwGZw6rh7uby9fTc5lhaOWFLX3I6R1hrF9k3zUY40e6igsLGkDXK92LJNg==
 
-offix-cache@0.8.0:
-  version "0.8.0"
-  resolved "https://registry.yarnpkg.com/offix-cache/-/offix-cache-0.8.0.tgz#57792e557b64d183b3ab85c778fd4f2e09297448"
-  integrity sha512-rXl5/svvLeHLEM5B2fLMCZ68gYTXrpgOmTIaAgKx/9pKLNXZWIc9rg0jEMlTmWMQI3kxU9icham/HbDbzDYPTA==
+offix-cache@0.8.2:
+  version "0.8.2"
+  resolved "https://registry.yarnpkg.com/offix-cache/-/offix-cache-0.8.2.tgz#eaf538bd5b964ca5b256637a13e52c2e39fe54e1"
+  integrity sha512-eIPabmWDYNqRdnEFgVDg3flhtx/veLJ937v5Hv7aD4hEV5cpogVkRNkL/rRHXE5xvwlPgDPJTvvp5/D5HjsZZA==
   dependencies:
     apollo-client "2.6.3"
     apollo-link "1.2.12"
     apollo-utilities "1.3.2"
     util "0.12.1"
 
-offix-client@0.8.0:
-  version "0.8.0"
-  resolved "https://registry.yarnpkg.com/offix-client/-/offix-client-0.8.0.tgz#72c0417f2112bd86275ac87d5e586b006acecb13"
-  integrity sha512-ntVqnZDBOyxJbdAo5m8WisXfPauEquI76Cl+Hda3663GZvtNbbw8t/bzNfk/2VUG81SC8CGjczBUHvG7SFUoAw==
+offix-client@0.8.2:
+  version "0.8.2"
+  resolved "https://registry.yarnpkg.com/offix-client/-/offix-client-0.8.2.tgz#7dab306fa455658c17f1ac84031c10c6acdb8a2a"
+  integrity sha512-mPMroXke3r23Gu1OKPU+hOLiuLAW7tFbQpS/u0eqQfcY582t5v52CfQAlc/CE3TfnHH/Z1LbMlmHGcZ/BD9PGw==
   dependencies:
     apollo-cache-inmemory "1.6.2"
     apollo-cache-persist "0.1.1"
@@ -7927,30 +7927,13 @@ offix-client@0.8.0:
     apollo-link-retry "2.2.14"
     debug "4.1.1"
     idb-localstorage "0.2.0"
-    offix-cache "0.8.0"
-    offix-offline "0.8.0"
+    offix-cache "0.8.2"
+    offix-offline "0.8.2"
 
-offix-client@0.8.1:
-  version "0.8.1"
-  resolved "https://registry.yarnpkg.com/offix-client/-/offix-client-0.8.1.tgz#e91500cef6c366cb8cbcabd344d2ad5584d54d6d"
-  integrity sha512-ANuT+EoBDfNbe5wLNPljMRnXjej76arHlIvD9W7LOQE75P5gii4vuF4ctJLIfUTzlOM/LKyednl/hZ2m5LNrhQ==
-  dependencies:
-    apollo-cache-inmemory "1.6.2"
-    apollo-cache-persist "0.1.1"
-    apollo-client "2.6.3"
-    apollo-link "1.2.12"
-    apollo-link-context "1.0.18"
-    apollo-link-http "1.5.15"
-    apollo-link-retry "2.2.14"
-    debug "4.1.1"
-    idb-localstorage "0.2.0"
-    offix-cache "0.8.0"
-    offix-offline "0.8.0"
-
-offix-offline@0.8.0:
-  version "0.8.0"
-  resolved "https://registry.yarnpkg.com/offix-offline/-/offix-offline-0.8.0.tgz#06792a46a6fe8b9c43f644693ebd951ff1474776"
-  integrity sha512-UPME0662Bp9KHq8q++eqObI5G22rshJ1C60UnPoh1KjKFJq7191MU9+OxdDCA6pePewthgQTzWX9ZDHRRfvI2Q==
+offix-offline@0.8.2:
+  version "0.8.2"
+  resolved "https://registry.yarnpkg.com/offix-offline/-/offix-offline-0.8.2.tgz#96c72723f4371b92b0b13c0f14527f8eda580554"
+  integrity sha512-MIW5Iythf60A+G71aAmV6QyjB4vrPqlTrvtz2NyQFq3oddUc9zEBB2GsSKgpBF0k4t3gmogWid0juf1eBrtaOw==
   dependencies:
     apollo-cache-inmemory "1.6.2"
     apollo-client "2.6.3"
@@ -7958,7 +7941,7 @@ offix-offline@0.8.0:
     apollo-link-error "1.1.11"
     debug "4.1.1"
     idb-localstorage "0.2.0"
-    offix-cache "0.8.0"
+    offix-cache "0.8.2"
 
 on-finished@~2.3.0:
   version "2.3.0"
@@ -9407,13 +9390,13 @@ react-motion@^0.5.0:
     prop-types "^15.5.8"
     raf "^3.1.0"
 
-react-offix-hooks@0.8.0:
-  version "0.8.0"
-  resolved "https://registry.yarnpkg.com/react-offix-hooks/-/react-offix-hooks-0.8.0.tgz#3cb092f5816e571563ff1859db894fe0754518ae"
-  integrity sha512-AQ7fQAZ2zWzd/Yqcc5vMPl0O610CuwhqdYcrfPuU9DKnHvzotIQaUNEPPa9I+1VzEgnEZ5BNguKOUfKG06we5A==
+react-offix-hooks@0.8.2:
+  version "0.8.2"
+  resolved "https://registry.yarnpkg.com/react-offix-hooks/-/react-offix-hooks-0.8.2.tgz#514050bbe0c054bcafd04658e0bf6ce3f9a42ce4"
+  integrity sha512-Ek1v+DTnH8wQViC//AX03vdl/lXkLnF1d4MUCZeOakEgUhwpQxOy2lLHDEZfazziFfomgbLKCo4ROxLRmcUrzg==
   dependencies:
     lodash "4.17.15"
-    offix-client "0.8.0"
+    offix-client "0.8.2"
 
 react-router-dom@5.0.1:
   version "5.0.1"
