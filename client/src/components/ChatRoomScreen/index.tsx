@@ -10,7 +10,6 @@ import MessagesList from './MessagesList';
 import { History } from 'history';
 import {
   useGetChatQuery,
-  useAddMessageMutation,
   GetChatQuery,
   GetChatQueryVariables,
   GetChatDocument,

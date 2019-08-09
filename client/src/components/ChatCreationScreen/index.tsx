@@ -20,6 +20,7 @@ const StyledUsersList = styled(UsersList)`
   height: calc(100% - 56px);
 `;
 
+// eslint-disable-next-line
 const addChatMutation = gql`
   mutation AddChat($recipientId: ID!) {
     addChat(recipientId: $recipientId) {

@@ -11,7 +11,7 @@ import ChatsListScreen from './components/ChatsListScreen';
 import ChatCreationScreen from './components/ChatCreationScreen';
 import AnimatedSwitch from './components/AnimatedSwitch';
 import { withAuth } from './services/auth.service';
-import { ApolloOfflineClient, OfflineClient } from 'offix-client';
+import { ApolloOfflineClient } from 'offix-client';
 import { ApolloProvider } from 'react-apollo-hooks'
 import { useOffixClient } from 'react-offix-hooks';
 
