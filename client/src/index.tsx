@@ -1,9 +1,8 @@
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { ApolloProvider } from 'react-apollo-hooks';
-import { createOfflineClient } from './client'
-import { OffixProvider } from './lib/offix-react-hooks/OffixProvider'
+import { createOfflineClient } from './client';
+import { OffixProvider } from 'react-offix-hooks';
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
@@ -16,7 +15,8 @@ const theme = createMuiTheme({
   },
 });
 
-const client = createOfflineClient()
+const client = createOfflineClient();
+// const client = new offlineClient
 
 ReactDOM.render(
   <MuiThemeProvider theme={theme}>

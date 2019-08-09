@@ -13,7 +13,7 @@ import AnimatedSwitch from './components/AnimatedSwitch';
 import { withAuth } from './services/auth.service';
 import { ApolloOfflineClient, OfflineClient } from 'offix-client';
 import { ApolloProvider } from 'react-apollo-hooks'
-import { useOffixClient } from './lib/offix-react-hooks/OffixProvider';
+import { useOffixClient } from 'react-offix-hooks';
 
 const App: React.FC = () => {
   const offixClient = useOffixClient()

@@ -17,7 +17,7 @@ import {
 } from '../../graphql/types';
 import * as fragments from '../../graphql/fragments';
 import { writeMessage } from '../../services/cache.service';
-import { useOfflineMutation } from '../../lib/offix-react-hooks/useOfflineMutation';
+import { useOfflineMutation } from 'react-offix-hooks';
 
 const Container = styled.div`
   background: url(/assets/chat-background.jpg);
