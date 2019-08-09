@@ -7160,15 +7160,15 @@ lodash@4.17.14:
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.14.tgz#9ce487ae66c96254fe20b599f21b6816028078ba"
   integrity sha512-mmKYbW3GLuJeX+iGP+Y7Gp1AiGHGbXHCOh/jZmrawMmsE7MS4znI3RL2FsjbqOyMayHInjOeykW7PEajUk1/xw==
 
+lodash@4.17.15, lodash@^4.17.12, lodash@^4.17.4, lodash@^4.2.0:
+  version "4.17.15"
+  resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.15.tgz#b447f6670a0455bbfeedd11392eff330ea097548"
+  integrity sha512-8xOcRHvCjnocdS5cpwXQXVzmmh5e5+saE2QGoeQmbKmRS6J3VQppPOIt0MnmE+4xlZoumy0GPG0D0MVIQbNA1A==
+
 "lodash@>=3.5 <5", lodash@^4.17.10, lodash@^4.17.11, lodash@^4.17.5:
   version "4.17.11"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.11.tgz#b39ea6229ef607ecd89e2c8df12536891cac9b8d"
   integrity sha512-cQKh8igo5QUhZ7lg38DYWAxMvjSAKG0A8wGSVimP07SIUEK2UO+arSRKbRZWtelMtN5V0Hkwh5ryOto/SshYIg==
-
-lodash@^4.17.12, lodash@^4.17.4, lodash@^4.2.0:
-  version "4.17.15"
-  resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.15.tgz#b447f6670a0455bbfeedd11392eff330ea097548"
-  integrity sha512-8xOcRHvCjnocdS5cpwXQXVzmmh5e5+saE2QGoeQmbKmRS6J3VQppPOIt0MnmE+4xlZoumy0GPG0D0MVIQbNA1A==
 
 log-symbols@3.0.0:
   version "3.0.0"
@@ -7912,6 +7912,23 @@ offix-cache@0.8.0:
     apollo-link "1.2.12"
     apollo-utilities "1.3.2"
     util "0.12.1"
+
+offix-client@0.8.0:
+  version "0.8.0"
+  resolved "https://registry.yarnpkg.com/offix-client/-/offix-client-0.8.0.tgz#72c0417f2112bd86275ac87d5e586b006acecb13"
+  integrity sha512-ntVqnZDBOyxJbdAo5m8WisXfPauEquI76Cl+Hda3663GZvtNbbw8t/bzNfk/2VUG81SC8CGjczBUHvG7SFUoAw==
+  dependencies:
+    apollo-cache-inmemory "1.6.2"
+    apollo-cache-persist "0.1.1"
+    apollo-client "2.6.3"
+    apollo-link "1.2.12"
+    apollo-link-context "1.0.18"
+    apollo-link-http "1.5.15"
+    apollo-link-retry "2.2.14"
+    debug "4.1.1"
+    idb-localstorage "0.2.0"
+    offix-cache "0.8.0"
+    offix-offline "0.8.0"
 
 offix-client@0.8.1:
   version "0.8.1"
@@ -9389,6 +9406,14 @@ react-motion@^0.5.0:
     performance-now "^0.2.0"
     prop-types "^15.5.8"
     raf "^3.1.0"
+
+react-offix-hooks@0.8.0:
+  version "0.8.0"
+  resolved "https://registry.yarnpkg.com/react-offix-hooks/-/react-offix-hooks-0.8.0.tgz#3cb092f5816e571563ff1859db894fe0754518ae"
+  integrity sha512-AQ7fQAZ2zWzd/Yqcc5vMPl0O610CuwhqdYcrfPuU9DKnHvzotIQaUNEPPa9I+1VzEgnEZ5BNguKOUfKG06we5A==
+  dependencies:
+    lodash "4.17.15"
+    offix-client "0.8.0"
 
 react-router-dom@5.0.1:
   version "5.0.1"

@@ -44,3 +44,5 @@ export function createOfflineClient() {
 
   return new OfflineClient(options);
 }
+
+export const client = createOfflineClient();
