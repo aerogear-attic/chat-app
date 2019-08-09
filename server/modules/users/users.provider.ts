@@ -3,7 +3,7 @@ import sql from "sql-template-strings";
 import { Database } from "../common/database.provider";
 import bcrypt from "bcrypt";
 const DEFAULT_PROFILE_PIC =
-  "https://raw.githubusercontent.com/Urigo/WhatsApp-Clone-Client-React/legacy/public/assets/default-profile-pic.jpg";
+  "https://i.ytimg.com/vi/pjAF3BWSan0/maxresdefault.jpg";
 
 @Injectable({
   scope: ProviderScope.Session

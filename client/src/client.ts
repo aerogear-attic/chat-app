@@ -23,7 +23,7 @@ const wsLink = new WebSocketLink({
 
 const terminatingLink = split(
   ({ query }) => {
-    const { kind, operation } = getMainDefinition(query);
+    const { kind, operation }: any = getMainDefinition(query);
     // If this is a subscription query, use wsLink, otherwise use httpLink
     return kind === 'OperationDefinition' && operation === 'subscription';
   },

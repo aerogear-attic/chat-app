@@ -68,7 +68,7 @@ const ChatNavbar: React.FC<ChatNavbarProps> = ({ chat, history }) => {
     variables: {
       chatId: chat.id,
     },
-    update: (client, { data: { removeChat } }) => {
+    update: (client, { data: { removeChat } }: any) => {
       eraseChat(client, removeChat);
     },
   });

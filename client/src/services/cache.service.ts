@@ -73,7 +73,7 @@ export const writeMessage = (client: Client, message: MessageFragment) => {
     data: fullChat,
   });
 
-  let data;
+  let data: any;
   try {
     data = client.readQuery({
       query: queries.chats,
@@ -120,7 +120,7 @@ export const writeChat = (client: Client, chat: ChatFragment) => {
     data: chat,
   });
 
-  let data;
+  let data: any;
   try {
     data = client.readQuery({
       query: queries.chats,
@@ -162,7 +162,7 @@ export const eraseChat = (client: Client, chatId: string) => {
     data: null,
   });
 
-  let data;
+  let data: any;
   try {
     data = client.readQuery({
       query: queries.chats,
