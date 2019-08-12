@@ -13,20 +13,27 @@ const Container = styled.div`
 `;
 
 const StyledList = styled(List)`
+  height: 100%;
+  display: flex;
+  flex-direction: column;
   padding: 0 !important;
 `;
 
 const NothingHere = styled.div`
-  height: 30px;
-  line-height: 30px;
-  position: absolute;
-  top: 60;
-  right: 0;
-  bottom: 0;
-  left: 60;
+  align-self: center;
+  margin: auto auto;
+  text-align: center;
+  color: black;
+`;
+
+const TitleIcon = styled.div`
+  font-size: 30pt;
+  width: 100%;
+`;
+
+const Title = styled.div`
   width: 100%;
   text-align: center;
-  font-size: 2em;
 `;
 
 const StyledListItem = styled(ListItem)`
@@ -96,7 +103,11 @@ const ChatsList: React.FC<ChatsListProps> = ({ history }) => {
   return (
     <Container>
       <StyledList>
-        {!chats && <div>{'Hello'}</div>}
+        {chats &&
+          <NothingHere>
+            <TitleIcon>&#x1f4ed;</TitleIcon>
+            <Title>Nothing here! <br/> Click to add a message.</Title>
+          </NothingHere>}
         {chats.map((chat: any) => (
           <StyledListItem
             key={chat.id}
