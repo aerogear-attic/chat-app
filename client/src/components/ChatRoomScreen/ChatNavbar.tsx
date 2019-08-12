@@ -14,18 +14,23 @@ const Container = styled(Toolbar)`
   padding: 0;
   display: flex;
   flex-direction: row;
-  background-color: var(--primary-bg);
+  justify-content: space-between;:
   color: var(--primary-text);
+  font-size: 25px;
+  font-weight: bold;
+  border-bottom: 1px solid #f1f1f1;
 `;
 
 const BackButton = styled(Button)`
+  padding-left: 0 !important;
+  justify-content: left !important;
+
   svg {
-    color: var(--primary-text);
+    color: var(--accent-colour-shade);
   }
 `;
 
 const Rest = styled.div`
-  flex: 1;
   display: flex;
   justify-content: flex-end;
 `;
@@ -41,11 +46,13 @@ const Picture = styled.img`
 `;
 
 const Name = styled.div`
-  line-height: 56px;
+  line-height: 100px;
 `;
 
 const DeleteButton = styled(Button)`
-  color: var(--primary-text) !important;
+  padding-right: 0 !important;
+  justify-content: flex-end !important;
+  color: var(--accent-colour-shade) !important;
 `;
 
 export const removeChatMutation = gql`
@@ -90,8 +97,8 @@ const ChatNavbar: React.FC<ChatNavbarProps> = ({ chat, history }) => {
       </BackButton>
       {chat && chat.picture && chat.name && (
         <React.Fragment>
-          <Picture data-testid="chat-picture" src={chat.picture} />
-          <Name data-testid="chat-name">{chat.name}</Name>
+          {/* <Picture data-testid="chat-picture" src={chat.picture} /> */}
+          <Name data-testid="chat-name">&#128081; &#x1F5E3; {chat.name}</Name>
         </React.Fragment>
       )}
       <Rest>
