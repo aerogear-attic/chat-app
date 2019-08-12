@@ -16,7 +16,6 @@ describe('ChatNavbar', () => {
     const chat = {
       id: '1',
       name: 'Foo Bar',
-      picture: 'https://localhost:4000/picture.jpg',
       messages: [
         {
           id: '1',
@@ -41,10 +40,6 @@ describe('ChatNavbar', () => {
       );
 
       expect(getByTestId('chat-name')).toHaveTextContent('Foo Bar');
-      expect(getByTestId('chat-picture')).toHaveAttribute(
-        'src',
-        'https://localhost:4000/picture.jpg'
-      );
     }
   });
 
@@ -55,7 +50,6 @@ describe('ChatNavbar', () => {
     const chat = {
       id: '1',
       name: 'Foo Bar',
-      picture: 'https://localhost:4000/picture.jpg',
       messages: [
         {
           id: '1',
@@ -108,7 +102,6 @@ describe('ChatNavbar', () => {
     const chat = {
       id: '1',
       name: 'Foo Bar',
-      picture: 'https://localhost:4000/picture.jpg',
       messages: [
         {
           id: '1',
