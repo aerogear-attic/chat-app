@@ -67,7 +67,7 @@ export type MutationAddMessageArgs = {
 };
 
 export type MutationAddChatArgs = {
-  recipientId: Scalars["ID"];
+  recipientId: Array<Scalars["ID"]>;
 };
 
 export type MutationRemoveChatArgs = {

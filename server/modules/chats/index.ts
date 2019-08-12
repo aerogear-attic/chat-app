@@ -44,7 +44,7 @@ const typeDefs = gql`
 
   extend type Mutation {
     addMessage(chatId: ID!, content: String!): Message
-    addChat(recipientId: ID!): Chat
+    addChat(recipientId: [ID!]!): Chat
     removeChat(chatId: ID!): ID
   }
 
@@ -173,14 +173,12 @@ const resolvers: Resolvers = {
     },
 
     // creates a chat room between current user and a recipient, publish chat added subscription
-    async addChat(root, { recipientId }, { injector }) {
+    async addChat(root, args, { injector }) {
       const currentUser = await injector.get(Auth).currentUser();
-
       if (!currentUser) return null;
-
       return injector
         .get(Chats)
-        .addChat({ recipientId, userId: currentUser.id });
+        .addChat({ userId: currentUser.id, recipientsId: args.recipientId});
     },
 
     // removes chat of X chat Id that belongs to current user, publish chat removed pubsub

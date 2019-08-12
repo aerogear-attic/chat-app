@@ -6,6 +6,7 @@ import { QueryResult } from "pg";
 import DataLoader from "dataloader";
 import format from "date-fns/format";
 import { Chat } from "../../db";
+import { forEachField } from "@kamilkisiela/graphql-tools";
 
 type ChatsByUser = { userId: string };
 type ChatByUser = { userId: string; chatId: string };
@@ -225,48 +226,95 @@ export class Chats {
     return messageAdded;
   }
 
-  async addChat({
-    userId,
-    recipientId
-  }: {
-    userId: string;
-    recipientId: string;
-  }) {
-    const { rows } = await this.db.query(sql`
+  async addChat({ userId, recipientsId }: { userId: string, recipientsId: string[] }) {
+    // if (recipientsId.length === 1) {
+    //   const recipientId = recipientsId[0];
+    //   console.log("inside first if")
+
+    //   const { rows } = await this.db.query(sql`
+    //   SELECT chats.* FROM chats, (SELECT * FROM chats_users WHERE user_id = ${userId}) AS chats_of_current_user, chats_users
+    //   WHERE chats_users.chat_id = chats_of_current_user.chat_id
+    //   AND chats.id = chats_users.chat_id
+    //   AND chats_users.user_id = ${recipientId}
+    // `);
+    //   // If there is already a chat between these two users, return it
+    //   if (rows[0]) {
+    //     return rows[0];
+    //   }
+    //   try {
+    //     await this.db.query("BEGIN");
+    //     const { rows } = await this.db.query(sql`
+    //     INSERT INTO chats
+    //     DEFAULT VALUES
+    //     RETURNING *
+    //   `);
+    //     const chatAdded = rows[0];
+    //     await this.db.query(sql`
+    //     INSERT INTO chats_users(chat_id, user_id)
+    //     VALUES(${chatAdded.id}, ${userId})
+    //   `);
+    //     await this.db.query(sql`
+    //     INSERT INTO chats_users(chat_id, user_id)
+    //     VALUES(${chatAdded.id}, ${recipientId})
+    //   `);
+    //     await this.db.query("COMMIT");
+    //     this.pubsub.publish("chatAdded", {
+    //       chatAdded
+    //     });
+    //     return chatAdded;
+    //   } catch (e) {
+    //     await this.db.query("ROLLBACK");
+    //     throw e;
+    //   }
+    // } else {
+      var groupOfRecipients: string = ` AND chats_users.user_id = ${recipientsId[0]}`;
+
+      for (let i = 1; i < recipientsId.length; i++) {
+        groupOfRecipients = groupOfRecipients + ` AND chats_users.user_id = ${recipientsId[i]}`;
+        console.log(groupOfRecipients)
+      }
+     
+
+      const { rows } = await this.db.query(sql`
       SELECT chats.* FROM chats, (SELECT * FROM chats_users WHERE user_id = ${userId}) AS chats_of_current_user, chats_users
       WHERE chats_users.chat_id = chats_of_current_user.chat_id
       AND chats.id = chats_users.chat_id
-      AND chats_users.user_id = ${recipientId}
+      ${groupOfRecipients}
     `);
-    // If there is already a chat between these two users, return it
-    if (rows[0]) {
-      return rows[0];
-    }
-    try {
-      await this.db.query("BEGIN");
-      const { rows } = await this.db.query(sql`
+      // If there is already a chat between these two users, return it
+      if (rows[0]) {
+        return rows[0];
+      }
+      try {
+        await this.db.query("BEGIN");
+        const { rows } = await this.db.query(sql`
         INSERT INTO chats
         DEFAULT VALUES
         RETURNING *
       `);
-      const chatAdded = rows[0];
-      await this.db.query(sql`
+        const chatAdded = rows[0];
+        await this.db.query(sql`
         INSERT INTO chats_users(chat_id, user_id)
         VALUES(${chatAdded.id}, ${userId})
       `);
-      await this.db.query(sql`
+        for (var i = 0; i < recipientsId.length; i++) {
+          const groupOfRecipients = recipientsId[i]
+          await this.db.query(sql`
         INSERT INTO chats_users(chat_id, user_id)
-        VALUES(${chatAdded.id}, ${recipientId})
+        VALUES(${chatAdded.id}, ${groupOfRecipients})
       `);
-      await this.db.query("COMMIT");
-      this.pubsub.publish("chatAdded", {
-        chatAdded
-      });
-      return chatAdded;
-    } catch (e) {
-      await this.db.query("ROLLBACK");
-      throw e;
-    }
+        }
+        await this.db.query("COMMIT");
+        this.pubsub.publish("chatAdded", {
+          chatAdded
+        });
+        return chatAdded;
+      } catch (e) {
+        await this.db.query("ROLLBACK");
+        throw e;
+      }
+
+    // }
   }
 
   async removeChat({ chatId, userId }: { chatId: string; userId: string }) {

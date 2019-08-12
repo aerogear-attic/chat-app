@@ -22,7 +22,7 @@ const StyledUsersList = styled(UsersList)`
 
 // eslint-disable-next-line
 const addChatMutation = gql`
-  mutation AddChat($recipientId: ID!) {
+  mutation AddChat($recipientId: [ID!]!) {
     addChat(recipientId: $recipientId) {
       ...Chat
     }
