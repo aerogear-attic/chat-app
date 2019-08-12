@@ -35,6 +35,7 @@ const Rest = styled.div`
   justify-content: flex-end;
 `;
 
+// eslint-disable-next-line
 const Picture = styled.img`
   height: 40px;
   width: 40px;

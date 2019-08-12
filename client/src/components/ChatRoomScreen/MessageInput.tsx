@@ -28,6 +28,7 @@ font-family: var(--font-family) !important;
   line-height: 45px;
 `;
 
+// eslint-disable-next-line
 const Meta = styled.div`
   color: var(--secondary-bg);
   font-size: 25px;
