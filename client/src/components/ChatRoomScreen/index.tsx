@@ -19,7 +19,7 @@ import { writeMessage } from '../../services/cache.service';
 import { useOfflineMutation } from 'react-offix-hooks';
 
 const Container = styled.div`
-  background: url(/assets/chat-background.jpg);
+  background: white;
   display: flex;
   flex-flow: column;
   height: 100vh;
