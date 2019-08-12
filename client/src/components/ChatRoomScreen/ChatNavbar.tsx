@@ -99,7 +99,7 @@ const ChatNavbar: React.FC<ChatNavbarProps> = ({ chat, history }) => {
       {chat && chat.picture && chat.name && (
         <React.Fragment>
           {/* <Picture data-testid="chat-picture" src={chat.picture} /> */}
-          <Name data-testid="chat-name">&#128081; &#x1F5E3; {chat.name}</Name>
+          <Name data-testid="chat-name"><span>&#128081; &#x1F5E3;</span>{chat.name}</Name>
         </React.Fragment>
       )}
       <Rest>

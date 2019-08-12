@@ -162,7 +162,7 @@ export const eraseChat = (client: Client, chatId: string) => {
     data: null,
   });
 
-  let data;
+  let data: any;
   try {
     data = client.readQuery({
       query: queries.chats,
