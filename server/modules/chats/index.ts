@@ -9,6 +9,7 @@ import { Users } from "./../users/users.provider";
 import { Chats } from "./chats.provider";
 import { PubSub } from "../common/pubsub.provider";
 import { Auth } from "./../users/auth.provider";
+import { assertGenericTypeAnnotation } from "babel-types";
 
 // creating schema for chats
 const typeDefs = gql`
