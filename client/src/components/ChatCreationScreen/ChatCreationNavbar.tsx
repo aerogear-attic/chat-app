@@ -1,4 +1,5 @@
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
+import AddIcon from '@material-ui/icons/Add';
 import { Toolbar, Button } from '@material-ui/core';
 import React from 'react';
 import { useCallback } from 'react';
@@ -21,6 +22,10 @@ const BackButton = styled(Button)`
 
 const Title = styled.div`
   flex: 1;
+`;
+
+const CreateChatButton = styled(Button)`
+  color: var(--primary-text) !important;
 `;
 
 interface ChildComponentProps {
