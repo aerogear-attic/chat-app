@@ -86,10 +86,10 @@ const MessageInput: React.FC<MessageInputProps> = ({ onSendMessage }) => {
           onKeyPress={onKeyPress}
           onChange={onChange}
         />
-        <Meta>
+        {/* <Meta>
           &#9786;
           &#128206;
-        </Meta>
+        </Meta> */}
       </InputContainer>
       <SendButton
         data-testid="send-button"
