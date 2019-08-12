@@ -8,18 +8,25 @@ import SignUpForm from './SignUpForm';
 import { RouteComponentProps } from 'react-router-dom';
 
 const Container = styled.div`
-  background: radial-gradient(rgb(34, 65, 67), rgb(17, 48, 50)),
-    url(/assets/chat-background.jpg) no-repeat;
-  background-size: cover;
-  background-blend-mode: multiply;
-  color: white;
+  background: white;
+  color: #0a0a0a;
+
+  form {
+    font-family: var(--font-family) !important;
+    margin: 30pt auto;
+    width: 70%;
+    text-align: center;
+  }
 `;
 
 const Intro = styled.div`
-  height: 265px;
 `;
 
-const Icon = styled.img`
+const TitleIcon = styled.div`
+  font-size: 30pt;
+  width: 100%;
+  text-align: center;
+  color: black;
   width: 125px;
   height: auto;
   margin-left: auto;
@@ -31,7 +38,8 @@ const Icon = styled.img`
 const Title = styled.h2`
   width: 100%;
   text-align: center;
-  color: white;
+  font-size: 2em;
+  color: #0a0a0a;
 `;
 
 // eslint-disable-next-line
@@ -77,8 +85,8 @@ const AuthScreen: React.FC<RouteComponentProps<any>> = ({
   return (
     <Container className="AuthScreen Screen">
       <Intro className="AuthScreen-intro">
-        <Icon src="assets/whatsapp-icon.png" className="AuthScreen-icon" />
-        <Title className="AuthScreen-title">WhatsApp</Title>
+        <TitleIcon>&#x1F64C;</TitleIcon>
+        <Title className="Title-icon">Chat App</Title>
       </Intro>
       <AnimatedSwitch>
         <Route exact path="/sign-in" component={SignInForm} />
