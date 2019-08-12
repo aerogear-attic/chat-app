@@ -9,17 +9,20 @@ import { History } from 'history';
 const Container = styled(Toolbar)`
   display: flex;
   background-color: var(--primary-bg);
+  justify-content: space-between;
   color: var(--primary-text);
-  font-size: 20px;
-  line-height: 40px;
+  font-size: 25px;
+  line-height: 100px;
+  font-weight: bold;
 `;
 
 const Title = styled.div`
-  flex: 1;
 `;
 
 const LogoutButton = styled(Button)`
   color: var(--primary-text) !important;
+  padding-right: 0 !important;
+  justify-content: flex-end !important;
 `;
 
 interface ChildComponentProps {
@@ -37,7 +40,7 @@ const ChatsNavbar: React.FC<ChildComponentProps> = ({ history }) => {
 
   return (
     <Container>
-      <Title>Whatsapp Clone</Title>
+      <Title>Chats &#128276; &#128172;</Title>
       <LogoutButton data-testid="sign-out-button" onClick={handleSignOut}>
         <SignOutIcon />
       </LogoutButton>
