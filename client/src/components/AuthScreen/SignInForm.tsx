@@ -45,7 +45,6 @@ const SignInForm: React.FC<RouteComponentProps<any>> = ({ history }) => {
   return (
     <SignForm>
       <ActualForm>
-        <Legend>Sign in</Legend>
         <Section style={{ width: '100%' }}>
           <TextField
             data-testid="username-input"
