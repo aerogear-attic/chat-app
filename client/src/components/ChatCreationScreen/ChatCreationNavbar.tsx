@@ -11,6 +11,7 @@ const Container = styled(Toolbar)`
   color: var(--primary-text);
   font-size: 20px;
   line-height: 40px;
+  font-weight: bold;
 `;
 
 const BackButton = styled(Button)`

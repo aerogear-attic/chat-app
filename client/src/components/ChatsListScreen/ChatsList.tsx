@@ -16,6 +16,19 @@ const StyledList = styled(List)`
   padding: 0 !important;
 `;
 
+const NothingHere = styled.div`
+  height: 30px;
+  line-height: 30px;
+  position: absolute;
+  top: 60;
+  right: 0;
+  bottom: 0;
+  left: 60;
+  width: 100%;
+  text-align: center;
+  font-size: 2em;
+`;
+
 const StyledListItem = styled(ListItem)`
   height: 76px;
   padding: 0 15px;
@@ -34,12 +47,13 @@ const ChatInfo = styled.div`
   height: 46px;
   padding: 15px 0;
   margin-left: 10px;
-  border-bottom: 0.5px solid silver;
+  border-bottom: 0.5px solid var(--accent-colour-light);
   position: relative;
 `;
 
 const ChatName = styled.div`
   margin-top: 5px;
+  font-weight: bold;
 `;
 
 const MessageContent = styled.div`
@@ -82,6 +96,7 @@ const ChatsList: React.FC<ChatsListProps> = ({ history }) => {
   return (
     <Container>
       <StyledList>
+        {!chats && <div>{'Hello'}</div>}
         {chats.map((chat: any) => (
           <StyledListItem
             key={chat.id}

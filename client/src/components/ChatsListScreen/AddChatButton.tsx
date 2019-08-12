@@ -7,8 +7,8 @@ import { useUsersPrefetch } from '../UsersList';
 
 const Container = styled.div`
   position: fixed;
-  right: 10px;
-  bottom: 10px;
+  right: 20px;
+  bottom: 20px;
 
   button {
     min-width: 50px;
@@ -17,6 +17,10 @@ const Container = styled.div`
     border-radius: 999px;
     background-color: var(--secondary-bg);
     color: white;
+
+    &:hover {
+      background-color: var(--secondary-bg-shade);
+    }
   }
 `;
 
