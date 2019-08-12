@@ -10,7 +10,7 @@ const Container = styled.div`
   display: block;
   flex: 2;
   overflow-y: overlay;
-  padding: 0 24px;
+  padding: 24px 24px 0 24px;
 `;
 
 const LoadingMore = styled.div`
