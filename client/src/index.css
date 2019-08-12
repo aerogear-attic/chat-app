@@ -1,18 +1,26 @@
+@import url('https://fonts.googleapis.com/css?family=Raleway&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Work+Sans&display=swap');
+
 :root {
-  --primary-bg: #2c6157;
-  --secondary-bg: #6fd056;
+  --primary-bg: #2fe9b1;
+  --secondary-bg: #3b29ff;
   --primary-text: white;
   --secondary-text: white;
+  --font-family: 'Work Sans', 'Raleway', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+  'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+  sans-serif; 
 }
 
 body {
   margin: 0;
   padding: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  font-family: var(--font-family);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+form, input, label, button {
+  font-family: var(--font-family) !important;
 }
 
 code {

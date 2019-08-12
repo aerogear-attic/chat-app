@@ -20,14 +20,13 @@ export const Legend = styled.legend`
 `;
 
 export const Label = styled.label`
-  color: white !important;
 `;
 
 export const Input = styled.input`
-  color: white;
+  color: black;
 
   &::placeholder {
-    color: var(--primary-bg);
+    color: var(--secondary-bg);
   }
 `;
 
@@ -36,19 +35,18 @@ export const TextField = styled(MaterialTextField)`
   position: relative;
 
   > div::before {
-    border-color: white !important;
+    border-color: #f1f1f1 !important;
   }
 
   input {
-    color: white !important;
+    color: black !important;
 
     &::placeholder {
-      color: var(--primary-bg) !important;
+      color: var(--secondary-bg) !important;
     }
   }
 
   label {
-    color: white !important;
   }
 `;
 
@@ -68,7 +66,6 @@ export const Button = styled(MaterialButton)`
 `;
 
 export const ErrorMessage = styled.div`
-  position: fixed;
   color: red;
   font-size: 15px;
   margin-top: 20px;
