@@ -4,6 +4,7 @@
 :root {
   --primary-bg: #2fe9b1;
   --secondary-bg: #3b29ff;
+  --secondary-bg-shade: #2a1fad;
   --primary-text: white;
   --secondary-text: white;
   --font-family: 'Work Sans', 'Raleway', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
