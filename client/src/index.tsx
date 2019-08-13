@@ -16,8 +16,6 @@ const theme = createMuiTheme({
 });
 
 const client = createOfflineClient();
-// const client = new offlineClient
-
 ReactDOM.render(
   <MuiThemeProvider theme={theme}>
     <OffixProvider client={client}>
