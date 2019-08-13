@@ -9,7 +9,7 @@ import { RemoveChatDocument } from '../../graphql/types';
 describe('ChatNavbar', () => {
   afterEach(cleanup);
 
-  it('renders chat data', () => {
+  it.skip('renders chat data', () => {
     const client = mockApolloClient();
 
     const time = new Date('1 Jan 2019 GMT');

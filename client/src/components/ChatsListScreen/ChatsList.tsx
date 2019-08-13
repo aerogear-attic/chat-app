@@ -100,14 +100,22 @@ const ChatsList: React.FC<ChatsListProps> = ({ history }) => {
   }
   let chats = data.chats;
 
-  return (
-    <Container>
-      <StyledList>
-        {chats &&
+  if (chats.length === 0) {
+    return (
+      <Container>
+        <StyledList>
           <NothingHere>
             <TitleIcon>&#x1f4ed;</TitleIcon>
             <Title>Nothing here! <br/> Click to add a message.</Title>
-          </NothingHere>}
+          </NothingHere>
+        </StyledList>
+      </Container>
+    )
+  }
+
+  return (
+    <Container>
+      <StyledList>
         {chats.map((chat: any) => (
           <StyledListItem
             key={chat.id}
