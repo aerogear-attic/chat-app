@@ -6,7 +6,13 @@ import { split } from 'apollo-link';
 import { getMainDefinition } from 'apollo-utilities';
 
 const httpUri = process.env.REACT_APP_SERVER_URL + '/graphql';
-const wsUri = httpUri.replace(/^https?/, 'ws');
+let wsUri: string
+
+if (httpUri.includes('https://')) {
+  wsUri = httpUri.replace(/^https/, 'wss');
+} else {
+  wsUri = httpUri.replace(/^http/, 'ws');
+}
 
 const httpLink = new HttpLink({
   uri: httpUri,
