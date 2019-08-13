@@ -198,8 +198,6 @@ objects:
               value: postgresql
             - name: MQTT_HOST
               value: mosquitto-mqtt-broker
-            - name: RESET_DB
-              value: "true"
           ports:
           - containerPort: 4000
             protocol: TCP
