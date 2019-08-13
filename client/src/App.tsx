@@ -22,8 +22,6 @@ const App: React.FC = () => {
   // It's null at the start
   const [apolloClient, setApolloClient] = useState(null as unknown as ApolloOfflineClient)
 
-  console.log('app render')
-
   // Inside useEffect, initialize the offix client and set the apollo client
   // This only happens once.
   useEffect(() => {

@@ -1,22 +1,20 @@
 # Stage 1 - the build process
 FROM node:10 as build-deps
-
-ARG SERVER_URL
-
 WORKDIR /usr/src/app
 COPY ./client ./client
 COPY ./server ./server
 WORKDIR /usr/src/app/client
 RUN yarn install
 RUN yarn codegen
-RUN REACT_APP_SERVER_URL=$SERVER_URL yarn build
+RUN yarn build
 
 # Stage 2 - the production environment
 FROM node:10
 WORKDIR /usr/src/app
-COPY --from=build-deps /usr/src/app/client/build ./build
-COPY ./client/server.js ./server.js
-RUN yarn add express
-RUN yarn add morgan
-EXPOSE 8080
-CMD ["node", "server.js"]
+COPY --from=build-deps /usr/src/app/client/build ./client/build
+COPY ./server ./server
+WORKDIR /usr/src/app/server
+RUN yarn install
+RUN yarn codegen
+EXPOSE 4000
+CMD ["npm", "start"]

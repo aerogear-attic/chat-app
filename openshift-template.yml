@@ -151,25 +151,12 @@ objects:
 - apiVersion: v1
   kind: ImageStream
   metadata:
-    name: chatapp-server
+    name: chatapp-demo
   spec:
     tags:
     - from:
         kind: DockerImage
-        name: aerogear/chatapp-server
-      name: latest
-      importPolicy:
-        scheduled: true
-
-- apiVersion: v1
-  kind: ImageStream
-  metadata:
-    name: chatapp-client
-  spec:
-    tags:
-    - from:
-        kind: DockerImage
-        name: aerogear/chatapp-client
+        name: aerogear/chatapp-demo
       name: latest
       importPolicy:
         scheduled: true
@@ -177,27 +164,29 @@ objects:
 - apiVersion: v1
   kind: DeploymentConfig
   metadata:
-    name: chatapp-server
+    name: chatapp-demo
   spec:
     replicas: 1
     selector:
-      deploymentconfig: chatapp-server
+      deploymentconfig: chatapp-demo
     strategy:
       resources: {}
     template:
       metadata:
         labels:
-          deploymentconfig: chatapp-server
+          deploymentconfig: chatapp-demo
       spec:
         containers:
-        - name: chatapp-server
-          image: chatapp-server:latest
+        - name: chatapp-demo
+          image: chatapp-demo:latest
           imagePullPolicy: Always
           env:
             - name: DB_HOST
               value: postgresql
             - name: MQTT_HOST
               value: mosquitto-mqtt-broker
+            - name: RESET_DB
+              value: 'true'
           ports:
           - containerPort: 4000
             protocol: TCP
@@ -206,49 +195,16 @@ objects:
     - imageChangeParams:
         automatic: true
         containerNames:
-        - chatapp-server
+        - chatapp-demo
         from:
           kind: ImageStreamTag
-          name: chatapp-server:latest
-      type: ImageChange
-
-- apiVersion: v1
-  kind: DeploymentConfig
-  metadata:
-    name: chatapp-client
-  spec:
-    replicas: 1
-    selector:
-      deploymentconfig: chatapp-client
-    strategy:
-      resources: {}
-    template:
-      metadata:
-        labels:
-          deploymentconfig: chatapp-client
-      spec:
-        containers:
-        - name: chatapp-client
-          imagePullPolicy: Always
-          image: chatapp-client:latest
-          ports:
-          - containerPort: 8080
-            protocol: TCP
-    triggers:
-    - type: ConfigChange
-    - imageChangeParams:
-        automatic: true
-        containerNames:
-        - chatapp-client
-        from:
-          kind: ImageStreamTag
-          name: chatapp-client:latest
+          name: chatapp-demo:latest
       type: ImageChange
 
 - apiVersion: v1
   kind: Service
   metadata:
-    name: chatapp-server
+    name: chatapp-demo
   spec:
     ports:
     - name: 4000-tcp
@@ -256,22 +212,7 @@ objects:
       protocol: TCP
       targetPort: 4000
     selector:
-      deploymentconfig: chatapp-server
-  status:
-    loadBalancer: {}
-
-- apiVersion: v1
-  kind: Service
-  metadata:
-    name: chatapp-client
-  spec:
-    ports:
-    - name: 4000-tcp
-      port: 4000
-      protocol: TCP
-      targetPort: 8080
-    selector:
-      deploymentconfig: chatapp-client
+      deploymentconfig: chatapp-demo
   status:
     loadBalancer: {}
 
@@ -280,27 +221,12 @@ objects:
   metadata:
     labels:
       app: aerogear-chatapp
-    name: chatapp-server
+    name: chatapp-demo
   spec:
     host: ""
     to:
       kind: Service
-      name: chatapp-server
-    tls:
-      termination: edge
-      insecureEdgeTerminationPolicy: Allow
-
-- apiVersion: v1
-  kind: Route
-  metadata:
-    labels:
-      app: aerogear-chatapp
-    name: chatapp-client
-  spec:
-    host: ""
-    to:
-      kind: Service
-      name: chatapp-client
+      name: chatapp-demo
     tls:
       termination: edge
       insecureEdgeTerminationPolicy: Allow
