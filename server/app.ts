@@ -1,12 +1,19 @@
 // seperating app into modules
 import bodyParser from "body-parser";
 import cors from "cors";
+import path from "path";
 // cookie parser reads cookie header and will parse it into a JSON and define it on req.cookies
 import cookieParser from "cookie-parser";
 import express from "express";
 import { origin } from "./env";
 
 export const app = express();
+
+app.use(express.static(path.join(__dirname, '/../client/build')));
+
+app.get('/*', function (req, res) {
+  res.sendFile(path.join(__dirname, '../client/build', 'index.html'));
+});
 
 // enabling server to receive and set cookies by enabling credentials headers to true. This is set also by client to include credentials headers
 // with each HTTP request

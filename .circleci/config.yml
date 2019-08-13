@@ -84,7 +84,6 @@ jobs:
           version: 17.05.0-ce
           docker_layer_caching: true
       - run: |         
-          TAG=$CIRCLE_TAG FOLDER=server ./scripts/buildPublishContainer.sh
-      - run: |
-          TAG=$CIRCLE_TAG SERVER_URL=$SERVER_URL FOLDER=client ./scripts/buildPublishContainer.sh
+          TAG=$CIRCLE_TAG ./scripts/buildContainer.sh
+          TAG=$CIRCLE_TAG ./scripts/publishContainer.sh
       

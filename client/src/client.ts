@@ -5,7 +5,11 @@ import { WebSocketLink } from 'apollo-link-ws';
 import { split } from 'apollo-link';
 import { getMainDefinition } from 'apollo-utilities';
 
-const httpUri = process.env.REACT_APP_SERVER_URL + '/graphql';
+const url = process.env.NODE_ENV === 'production' ? window.location.origin : process.env.REACT_APP_SERVER_URL
+
+const httpUri = url + '/graphql';
+
+console.log(`using url ${httpUri}`)
 let wsUri: string
 
 if (httpUri.includes('https://')) {
