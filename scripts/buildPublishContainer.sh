@@ -12,7 +12,7 @@ echo "Building docker container $CONTAINER"
 
 docker build -f $FOLDER/Dockerfile -t "$CONTAINER" .
 
-# [ -z "$DOCKERHUB_USERNAME" ] && echo "Undefined DOCKERHUB_USERNAME, skipping publish" && exit 1;
-# docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_PASSWORD
-# docker push "$CONTAINER"
+[ -z "$DOCKERHUB_USERNAME" ] && echo "Undefined DOCKERHUB_USERNAME, skipping publish" && exit 1;
+docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_PASSWORD
+docker push "$CONTAINER"
 
