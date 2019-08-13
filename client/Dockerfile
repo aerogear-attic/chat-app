@@ -1,18 +1,8 @@
-# Stage 1 - the build process
-FROM node:10 as build-deps
-
-ARG server_url
-
+FROM node:10
 WORKDIR /usr/src/app
-COPY ./client ./client
-COPY ./server ./server
-WORKDIR /usr/src/app/client
-RUN yarn install
-RUN yarn codegen
-RUN REACT_APP_SERVER_URL=$server_url yarn build
-
-# Stage 2 - the production environment
-FROM nginxinc/nginx-unprivileged
-COPY --from=build-deps /usr/src/app/client/build /usr/share/nginx/html
+COPY ./client/build ./build
+COPY ./client/server.js ./server.js
+RUN yarn add express
+RUN yarn add morgan
 EXPOSE 8080
-CMD ["nginx", "-g", "daemon off;"]
+CMD ["node", "server.js"]
