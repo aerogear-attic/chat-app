@@ -9,6 +9,7 @@ import { Users } from "./../users/users.provider";
 import { Chats } from "./chats.provider";
 import { PubSub } from "../common/pubsub.provider";
 import { Auth } from "./../users/auth.provider";
+import { assertGenericTypeAnnotation } from "babel-types";
 
 // creating schema for chats
 const typeDefs = gql`
@@ -44,7 +45,7 @@ const typeDefs = gql`
 
   extend type Mutation {
     addMessage(chatId: ID!, content: String!): Message
-    addChat(recipientId: ID!): Chat
+    addChat(recipientId: [ID!]!): Chat
     removeChat(chatId: ID!): ID
   }
 
@@ -91,9 +92,8 @@ const resolvers: Resolvers = {
     // pulling details of participant of chat that is not the current user but belongs to current user chat room
     async name(chat, args, { injector }) {
       const currentUser = await injector.get(Auth).currentUser();
-
+      
       if (!currentUser) return null;
-
       const participant = await injector.get(Chats).firstRecipient({
         chatId: chat.id,
         userId: currentUser.id
@@ -173,14 +173,12 @@ const resolvers: Resolvers = {
     },
 
     // creates a chat room between current user and a recipient, publish chat added subscription
-    async addChat(root, { recipientId }, { injector }) {
+    async addChat(root, args, { injector }) {
       const currentUser = await injector.get(Auth).currentUser();
-
       if (!currentUser) return null;
-
       return injector
         .get(Chats)
-        .addChat({ recipientId, userId: currentUser.id });
+        .addChat({ userId: currentUser.id, recipientsId: args.recipientId});
     },
 
     // removes chat of X chat Id that belongs to current user, publish chat removed pubsub

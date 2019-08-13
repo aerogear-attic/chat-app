@@ -50,16 +50,24 @@ export const useUsersPrefetch = () => {
 };
 
 interface ChildComponentProps {
-  onUserPick: any;
+  dispatch: any;
+  selectedUsers: string[]
 }
 
-const UsersList: React.FC<ChildComponentProps> = ({
-  onUserPick = (user: User) => {},
-}) => {
+const UsersList: React.FC<ChildComponentProps> = ({ dispatch, selectedUsers }) => {
   const { data, loading: loadingUsers } = useUsersListQuery();
 
   if (data === undefined) return null;
   const users = data.users;
+
+  function onUserClicked(user:any) {
+    const selectedUserIndex = selectedUsers.indexOf(user.id)
+    if (selectedUserIndex === -1) {
+      dispatch({ type: 'add', value: user.id})
+    } else {
+      dispatch({ type: 'remove', value: selectedUserIndex})
+    }
+  }
 
   return (
     <ActualList>
@@ -68,7 +76,8 @@ const UsersList: React.FC<ChildComponentProps> = ({
           <UserItem
             key={user.id}
             data-testid="user"
-            onClick={onUserPick.bind(null, user)}
+            onClick={onUserClicked.bind(null, user)}
+            selected={selectedUsers.includes(user.id)}
             button>
             {user !== null && user.picture !== null && (
               <React.Fragment>
