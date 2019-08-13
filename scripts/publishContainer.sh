@@ -1,5 +1,6 @@
 [ -z "$CI" ] && echo "This script is meant to run only from CircleCI." && exit 1;
 
+TAG="${TAG:-latest}"
 APPNAME="chatapp-demo"
 NAMESPACE="aerogear"
 CONTAINER="$NAMESPACE/$APPNAME:$TAG"
