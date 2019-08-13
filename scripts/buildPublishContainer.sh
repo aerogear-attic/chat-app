@@ -10,7 +10,11 @@ CONTAINER="$NAMESPACE/$APPNAME:$TAG"
 
 echo "Building docker container $CONTAINER"
 
-docker build -f $FOLDER/Dockerfile -t "$CONTAINER" .
+if [ "$FOLDER"=="client" ]; then
+  docker build -f $FOLDER/Dockerfile -t "$CONTAINER" --build-arg SERVER_URL=$SERVER_URL .
+else
+  docker build -f $FOLDER/Dockerfile -t "$CONTAINER" .
+fi
 
 [ -z "$DOCKERHUB_USERNAME" ] && echo "Undefined DOCKERHUB_USERNAME, skipping publish" && exit 1;
 docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_PASSWORD
