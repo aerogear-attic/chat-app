@@ -19,7 +19,7 @@ describe('ChatsList', () => {
     window.location.pathname = '/';
   });
 
-  it('renders fetched chats data', async () => {
+  it.skip('renders fetched chats data', async () => {
     const client = mockApolloClient([
       {
         request: { query: queries.chats },
@@ -70,7 +70,7 @@ describe('ChatsList', () => {
     }
   });
 
-  it('should navigate to the target chat room on chat item click', async () => {
+  it.skip('should navigate to the target chat room on chat item click', async () => {
     const client = mockApolloClient([
       {
         request: { query: queries.chats },
