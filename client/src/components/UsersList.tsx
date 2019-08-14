@@ -4,7 +4,7 @@ import gql from 'graphql-tag';
 import React from 'react';
 import styled from 'styled-components';
 import { useApolloClient } from 'react-apollo-hooks';
-import { useUsersListQuery, User, UsersListDocument } from '../graphql/types';
+import { useUsersListQuery, UsersListDocument } from '../graphql/types';
 import * as fragments from '../graphql/fragments';
 
 const ActualList = styled(MaterialList)`
