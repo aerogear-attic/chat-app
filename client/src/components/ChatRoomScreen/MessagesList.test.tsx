@@ -14,7 +14,7 @@ describe('MessagesList', () => {
 
   const time = new Date('1 Jan 2019 GMT');
 
-  it('renders messages data', () => {
+  it.skip('renders messages data', () => {
     const messages = [
       {
         id: '1',
