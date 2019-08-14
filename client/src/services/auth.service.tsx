@@ -26,8 +26,6 @@ export const withAuth = <P extends object>(
     const signOut = useSignOut();
     const { data, error, loading } = useMeQuery();
 
-    useCacheService();
-
     if (loading) return null;
 
     if (data === undefined) return null;
