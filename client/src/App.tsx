@@ -14,6 +14,33 @@ import { withAuth } from './services/auth.service';
 import { ApolloOfflineClient } from 'offix-client';
 import { ApolloProvider } from 'react-apollo-hooks'
 import { useOffixClient } from 'react-offix-hooks';
+import { useCacheService } from './services/cache.service'
+
+const Router: React.FC = () => {
+  console.log('renderApp')
+  useCacheService()
+  return (
+    <BrowserRouter>
+      <AnimatedSwitch>
+        <Route exact path="/sign-(in|up)" component={AuthScreen} />
+        <Route exact path="/chats" component={withAuth(ChatsListScreen)} />
+
+        <Route
+          exact
+          path="/chats/:chatId"
+          component={withAuth(
+            ({ match, history }: RouteComponentProps<{ chatId: string }>) => (
+              <ChatRoomScreen chatId={match.params.chatId} history={history} />
+            )
+          )}
+        />
+
+        <Route exact path="/new-chat" component={withAuth(ChatCreationScreen)} />
+      </AnimatedSwitch>
+      <Route exact path="/" render={redirectToChats} />
+    </BrowserRouter>
+  )
+};
 
 const App: React.FC = () => {
   const offixClient = useOffixClient()
@@ -35,34 +62,12 @@ const App: React.FC = () => {
   if (apolloClient) {
     return (
       <ApolloProvider client={apolloClient}>
-        {renderApp()}
+        <Router />
       </ApolloProvider>
     )
   }
   return <div>Loading...</div>
 };
-
-const renderApp = () => (
-  <BrowserRouter>
-  <AnimatedSwitch>
-    <Route exact path="/sign-(in|up)" component={AuthScreen} />
-    <Route exact path="/chats" component={withAuth(ChatsListScreen)} />
-
-    <Route
-      exact
-      path="/chats/:chatId"
-      component={withAuth(
-        ({ match, history }: RouteComponentProps<{ chatId: string }>) => (
-          <ChatRoomScreen chatId={match.params.chatId} history={history} />
-        )
-      )}
-    />
-
-    <Route exact path="/new-chat" component={withAuth(ChatCreationScreen)} />
-  </AnimatedSwitch>
-  <Route exact path="/" render={redirectToChats} />
-</BrowserRouter>
-);
 
 const redirectToChats = () => <Redirect to="/chats" />;
 
