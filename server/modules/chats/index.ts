@@ -252,7 +252,7 @@ const resolvers: Resolvers = {
     // subscription for removing a chat room for current user and chat room of chat id of removed chat room.
     chatRemoved: {
       subscribe: withFilter(
-        (root, args, { pubsub }) => pubsub.asyncIterator("chatRemoved"),
+        (root, args, { injector }) => injector.get(PubSub).asyncIterator("chatAdded"),
         async ({ targetChat }: { targetChat: Chat }, args, { injector }) => {
           const currentUser = await injector.get(Auth).currentUser();
           if (!currentUser) return false;
