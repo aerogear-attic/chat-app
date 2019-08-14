@@ -9,12 +9,6 @@ import { origin } from "./env";
 
 export const app = express();
 
-app.use(express.static(path.join(__dirname, '/../client/build')));
-
-app.get('/*', function (req, res) {
-  res.sendFile(path.join(__dirname, '../client/build', 'index.html'));
-});
-
 // enabling server to receive and set cookies by enabling credentials headers to true. This is set also by client to include credentials headers
 // with each HTTP request
 app.use(cors({ credentials: true, origin }));
