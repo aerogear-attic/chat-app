@@ -5,6 +5,7 @@ import styled, { css } from 'styled-components';
 import { useInfiniteScroll } from '../../hooks/use-infinite-scroll';
 import { useAdjustedScroll } from '../../hooks/use-adjusted-scroll';
 
+
 const Container = styled.div`
   position: relative;
   display: block;
@@ -78,7 +79,11 @@ const MessageItem = styled.div`
 `;
 
 const Contents = styled.div`
+<<<<<<< Updated upstream
   padding: 5px 7px;
+=======
+  padding: 10px 20px;
+>>>>>>> Stashed changes
   word-wrap: break-word;
 
   &::after {
@@ -139,7 +144,7 @@ const MessagesList: React.FC<MessagesListProps> = ({
           data-testid="message-item"
           isMine={message.isMine}
           key={message.id}>
-          <Contents data-testid="message-content">{message.content}</Contents>
+          <Contents data-testid="message-content">{message.sender.name + ":"} {message.content}</Contents>
           <Timestamp data-testid="message-date">
             {format(message.createdAt, 'HH:mm')}
           </Timestamp>
