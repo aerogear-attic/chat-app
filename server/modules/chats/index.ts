@@ -94,12 +94,27 @@ const resolvers: Resolvers = {
       const currentUser = await injector.get(Auth).currentUser();
       
       if (!currentUser) return null;
-      const participant = await injector.get(Chats).firstRecipient({
-        chatId: chat.id,
-        userId: currentUser.id
-      });
+      const participants = await injector.get(Chats).participants(chat.id)
 
-      return participant ? participant.name : null;
+      const participantsWithoutCurrentUser = participants.filter((participant) => {
+        return participant.id !== currentUser.id
+      })
+
+      
+      if (participantsWithoutCurrentUser.length === 1) {
+        const otherParticipant = participantsWithoutCurrentUser[0]
+        return otherParticipant.name || otherParticipant.username || ""
+      }
+
+      const names = participantsWithoutCurrentUser.reduce((prev, participant) => {
+        const name = participant.name || participant.username || ""
+        if (prev === "") {
+          return name
+        }
+        return `${prev}, ${name}`
+      }, "")
+
+      return names
     },
 
     // pulling details of participant of chat that is not the current user but belongs to current user chat room
@@ -108,14 +123,19 @@ const resolvers: Resolvers = {
 
       if (!currentUser) return null;
 
-      const participant = await injector.get(Chats).firstRecipient({
-        chatId: chat.id,
-        userId: currentUser.id
-      });
+      const participants = await injector.get(Chats).participants(chat.id)
 
-      return participant && participant.picture
+      const participantsWithoutCurrentUser = participants.filter((participant) => {
+        return participant.id !== currentUser.id
+      })
+
+      if (participantsWithoutCurrentUser.length === 1) {
+        const participant = participantsWithoutCurrentUser[0]
+        return participant && participant.picture
         ? participant.picture
         : injector.get(UnsplashApi).getRandomPhoto();
+      }
+      return injector.get(UnsplashApi).getRandomPhoto();
     },
 
     // pulling all messages for X chat room
