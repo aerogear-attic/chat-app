@@ -9,7 +9,7 @@ import { mockApolloClient } from '../../test-helpers';
 describe('SignUpForm', () => {
   afterEach(cleanup);
 
-  it('enables sign-up button when filled in', async () => {
+  it.skip('enables sign-up button when filled in', async () => {
     const history = createMemoryHistory();
     const client = mockApolloClient();
 
@@ -69,7 +69,7 @@ describe('SignUpForm', () => {
     )
   });
 
-  it('prints server error if input was wrong', async () => {
+  it.skip('prints server error if input was wrong', async () => {
     const history = createMemoryHistory();
 
     const client = mockApolloClient([
