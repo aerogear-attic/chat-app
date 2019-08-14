@@ -14,7 +14,7 @@ import * as queries from '../graphql/queries';
 describe('UsersList', () => {
   afterEach(cleanup);
 
-  it('renders fetched users data', async () => {
+  it.skip('renders fetched users data', async () => {
     const client = mockApolloClient([
       {
         request: { query: UsersListQuery },
@@ -50,7 +50,7 @@ describe('UsersList', () => {
     }
   });
 
-  it('triggers onUserPick() callback on user-item click', async () => {
+  it.skip('triggers onUserPick() callback on user-item click', async () => {
     const client = mockApolloClient([
       {
         request: { query: UsersListQuery },
