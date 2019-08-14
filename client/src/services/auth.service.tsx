@@ -3,7 +3,6 @@ import { useContext, useCallback } from 'react';
 import { useApolloClient } from 'react-apollo-hooks';
 import { Redirect } from 'react-router-dom';
 import { useMeQuery, User, useSignInMutation, useSignUpMutation } from '../graphql/types';
-import { useCacheService } from './cache.service';
 
 const MyContext = React.createContext<User | null>(null);
 
