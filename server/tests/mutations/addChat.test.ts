@@ -14,7 +14,7 @@ describe("Mutation.addChat", () => {
     const addChatRes = await mutate({
       variables: { recipientId: "3" },
       mutation: gql`
-        mutation AddChat($recipientId: ID!) {
+        mutation AddChat($recipientId: [ID!]!) {
           addChat(recipientId: $recipientId) {
             id
             name
@@ -58,7 +58,7 @@ describe("Mutation.addChat", () => {
     const addChatRes = await mutate({
       variables: { recipientId: "2" },
       mutation: gql`
-        mutation AddChat($recipientId: ID!) {
+        mutation AddChat($recipientId: [ID!]!) {
           addChat(recipientId: $recipientId) {
             id
             name
