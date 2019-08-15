@@ -6,7 +6,7 @@ import ChatCreationNavbar from './ChatCreationNavbar';
 describe('ChatCreationNavbar', () => {
   afterEach(cleanup);
 
-  it.skip('goes back on arrow click', async () => {
+  it('goes back on arrow click', async () => {
     const history = createMemoryHistory();
 
     history.push('/new-chat');
