@@ -226,17 +226,21 @@ export class Chats {
   }
 
   async addChat({ userId, recipientsId }: { userId: string, recipientsId: string[] }) {
-    if (recipientsId.length === 1) {
-      const { rows } = await this.db.query(sql`
-       SELECT chats.* FROM chats, (SELECT * FROM chats_users WHERE user_id = ${userId}) AS chats_of_current_user, chats_users
-      WHERE chats_users.chat_id = chats_of_current_user.chat_id
-      AND chats.id = chats_users.chat_id AND chats_users.user_id IN (${recipientsId.toString()})
-    `);
-      // If there is already a chat between these two users, return it
-      if (rows[0]) {
-        return rows[0];
-      }
-    }
+    // TEMPORARILY REMOVING CHECK FOR EXISTING CHAT DUE TO PROBLEMS WITH SQL QUERY 
+    // if (recipientsId.length === 1) {
+    //   const recipient = recipientsId[0];
+    //   console.log("inside if 1 found loop")
+    //   const { rows } = await this.db.query(sql`
+    //    SELECT chats.* FROM chats, (SELECT * FROM chats_users WHERE user_id = ${userId}) AS chats_of_current_user, chats_users
+    //   WHERE chats_users.chat_id = chats_of_current_user.chat_id
+    //   AND chats.id = chats_users.chat_id AND chats_users.user_id = ${recipient.toString()}
+    // `);
+    //   // If there is already a chat between these two users, return it
+    //   if (rows[0]) {
+    //     console.log("found a match returning existing chat")
+    //     return rows[0];
+    //   }
+    // }
     try {
       await this.db.query("BEGIN");
       const { rows } = await this.db.query(sql`
@@ -249,13 +253,8 @@ export class Chats {
         INSERT INTO chats_users(chat_id, user_id)
         VALUES(${chatAdded.id}, ${userId})
       `);
-      for (var i = 0; i < recipientsId.length; i++) {
-        const groupOfRecipients = recipientsId[i]
-        await this.db.query(sql`
-        INSERT INTO chats_users(chat_id, user_id)
-        VALUES(${chatAdded.id}, ${groupOfRecipients})
-      `);
-      }
+
+      await this.addRecipientsToChat(recipientsId, chatAdded)
       await this.db.query("COMMIT");
       this.pubsub.publish("chatAdded", {
         chatAdded
@@ -265,7 +264,16 @@ export class Chats {
       await this.db.query("ROLLBACK");
       throw e;
     }
+  }
 
+  async addRecipientsToChat(recipientsId: any[], chatAdded: any) {
+    for (var i = 0; i < recipientsId.length; i++) {
+      const groupOfRecipients = recipientsId[i]
+      await this.db.query(sql`
+        INSERT INTO chats_users(chat_id, user_id)
+        VALUES(${chatAdded.id}, ${groupOfRecipients})
+      `);
+    }
   }
 
   async removeChat({ chatId, userId }: { chatId: string; userId: string }) {
