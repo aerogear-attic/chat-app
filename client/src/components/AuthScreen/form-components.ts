@@ -57,7 +57,7 @@ export const Button = styled(MaterialButton)`
   background-color: var(--secondary-bg) !important;
 
   &[disabled] {
-    color: #38a81c;
+    color: rgba(255,255,255, 0.5) !important;
   }
 
   &:not([disabled]) {
