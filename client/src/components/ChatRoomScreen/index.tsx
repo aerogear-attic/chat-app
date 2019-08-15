@@ -112,6 +112,7 @@ const ChatRoom: React.FC<ChatRoomScreenParams> = ({ history, chatId }) => {
   const { after, limit, setAfter } = usePagination();
   const { data, loading, fetchMore } = useGetChatQuery({
     variables: { chatId, after, limit },
+    fetchPolicy: 'cache-and-network'
   });
 
 const [addMessage] = useOfflineMutation(addMessageMutation);
