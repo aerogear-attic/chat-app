@@ -16,6 +16,10 @@ const Container = styled.div`
     border-radius: 999px;
     background-color: var(--secondary-bg);
     color: white;
+
+    &:hover {
+      background-color: var(--secondary-bg-shade);
+    }
   }
 `;
 
