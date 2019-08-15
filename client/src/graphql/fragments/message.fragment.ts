@@ -5,9 +5,6 @@ export default gql`
     id
     createdAt
     content
-    sender {
-      name
-    }
     isMine
     chat {
       id

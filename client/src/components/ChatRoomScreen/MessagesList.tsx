@@ -131,7 +131,7 @@ const MessagesList: React.FC<MessagesListProps> = ({
           key={message.id}>
           <Contents data-testid="message-content">{message.content}</Contents>
           <Timestamp data-testid="message-date">
-            {message.isMine ? format(message.createdAt, 'HH:mm') : message.sender.name + " - " + format(message.createdAt, 'HH:mm')}
+            {format(message.createdAt, 'HH:mm')}
           </Timestamp>
         </MessageItem>
       ))}
