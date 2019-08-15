@@ -55,7 +55,7 @@ interface ChildComponentProps {
 }
 
 const UsersList: React.FC<ChildComponentProps> = ({ dispatch, selectedUsers }) => {
-  const { data, loading: loadingUsers } = useUsersListQuery();
+  const { data, loading: loadingUsers } = useUsersListQuery({ fetchPolicy: 'cache-and-network' });
 
   if (data === undefined) return null;
   const users = data.users;

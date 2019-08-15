@@ -13,7 +13,18 @@ import {
 
 type Client = ApolloClient<any> | DataProxy;
 
+export const useUseMessageAddedSubscription = () => {
+  useMessageAddedSubscription({
+    onSubscriptionData: ({ client, subscriptionData: { data } }) => {
+      if (data) {
+        writeMessage(client, data.messageAdded);
+      }
+    },
+  });
+}
+
 export const useCacheService = () => {
+
   useMessageAddedSubscription({
     onSubscriptionData: ({ client, subscriptionData: { data } }) => {
       if (data) {

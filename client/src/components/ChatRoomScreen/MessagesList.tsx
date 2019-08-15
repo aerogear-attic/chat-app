@@ -4,6 +4,7 @@ import { useEffect, useRef } from 'react';
 import styled, { css } from 'styled-components';
 import { useInfiniteScroll } from '../../hooks/use-infinite-scroll';
 import { useAdjustedScroll } from '../../hooks/use-adjusted-scroll';
+import { useUseMessageAddedSubscription } from '../../services/cache.service';
 
 const Container = styled.div`
   position: relative;
@@ -108,6 +109,8 @@ const MessagesList: React.FC<MessagesListProps> = ({
     ref: selfRef!,
   });
   const adjustScroll = useAdjustedScroll(selfRef);
+
+  useUseMessageAddedSubscription()
 
   useEffect(() => {
     if (!selfRef.current) return;

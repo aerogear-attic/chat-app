@@ -14,11 +14,8 @@ import { withAuth } from './services/auth.service';
 import { ApolloOfflineClient } from 'offix-client';
 import { ApolloProvider } from 'react-apollo-hooks'
 import { useOffixClient } from 'react-offix-hooks';
-import { useCacheService } from './services/cache.service'
 
 const Router: React.FC = () => {
-  console.log('renderApp')
-  useCacheService()
   return (
     <BrowserRouter>
       <AnimatedSwitch>

@@ -93,7 +93,7 @@ const ChatsList: React.FC<ChatsListProps> = ({ history }) => {
   );
   const prefetchChat = useGetChatPrefetch();
 
-  const { data } = useChatsQuery();
+  const { data } = useChatsQuery({ fetchPolicy: 'cache-and-network' });
 
   if (data === undefined || data.chats === undefined) {
     return null;
