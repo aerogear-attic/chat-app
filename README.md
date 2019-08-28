@@ -59,6 +59,10 @@ $ yarn start
 ```sh
 $ yarn install
 ```
+- Then we need to generate types by typing in:
+```sh
+$ yarn build
+```
 - Next we can launch our application by:
 ```sh
 $ yarn start
