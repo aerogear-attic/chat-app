@@ -22,7 +22,7 @@ Application was developed by two interns at Red Hat with support of Dara Hayes, 
 - Docker
 - CI/CD
 
-## rerequisites
+## Prerequisites
 
 - Node
 - npm & Yarn
