@@ -4,7 +4,7 @@ Chat-app is an application created based on [What's Up clone tutorial](https://w
 
 ##Motivation
 
-Application was developed by two interns at Red Hat with support of Dara Hays, a Software Engineer at Red Hat. Main purpouse for this app was to give a nice introduction to trending technologies that both interns might be exposed to during their internship. Chat-app has been also been extended with Offix, an open source library that is one of the core technologies developed by the mobile development groups in Red Hat, MQTT message broker, docker containers, CI/CD pipeline and support for group chats. 
+Application was developed by two interns at Red Hat with support of Dara Hayes, a Software Engineer at Red Hat. Main purpouse for this app was to give a nice introduction to trending technologies that both interns might be exposed to during their internship. Chat-app has been also been extended with Offix, an open source library that is one of the core technologies developed by the mobile development groups in Red Hat, MQTT message broker, docker containers, CI/CD pipeline and support for group chats. 
 
 ##What technologies does Chat-app use?
 
